@@ -5,25 +5,43 @@ import styles from './slider.module.css';
 
 const slides = [
   {
-    image: '/images/barunvalley.jpg',
+    image: '/slide2.jpg',
+    name: 'Lumbini',
+    description: 'Vibrant landscapes of Pokhara.',
+  },
+  {
+    image: '/barunvalley.jpg', 
     name: 'Barun Valley',
     description: 'A breathtaking view of Barun Valley.',
   },
   {
-    image: '/images/everest.jpg',
+    image: '/everest.jpg',
     name: 'Mt. Everest',
     description: 'The majestic beauty of Mt. Everest.',
   },
   {
-    image: '/images/sarangkot_20180710001134.jpg',
+    image: '/sarangkot_20180710001134.jpg',
     name: 'Sarangkot',
     description: 'Stunning views from Sarangkot.',
   },
   {
-    image: '/images/slide1.jpg',
+    image: '/slide1.jpg',
     name: 'Pokhara',
     description: 'Vibrant landscapes of Pokhara.',
   },
+  {
+    image: '/bhaktapur-city.webp',
+    name: 'Bhaktapur',
+    description: 'Vibrant landscapes of Pokhara.',
+  },
+  
+  
+  {
+    image: '/tilicho.jpg',
+    name: 'Tilicho Lake',
+    description: 'Vibrant landscapes of Pokhara.',
+  },
+
 ];
 
 const Slider = () => {
@@ -43,15 +61,8 @@ const Slider = () => {
 
   useEffect(() => {
     const handleKeyDown = (event) => {
-      const keyActions = {
-        ArrowRight: handleNext,
-        ArrowLeft: handlePrev
-      };
-
-      const action = keyActions[event.key];
-      if (action) {
-        action();
-      }
+      if (event.key === 'ArrowRight') handleNext();
+      if (event.key === 'ArrowLeft') handlePrev();
     };
 
     window.addEventListener('keydown', handleKeyDown);
@@ -67,9 +78,7 @@ const Slider = () => {
         {slides.map((slide, index) => (
           <div
             key={index}
-            className={`${styles.thumbnail} ${
-              index === activeIndex ? styles.active : ''
-            }`}
+            className={`${styles.thumbnail} ${index === activeIndex ? styles.active : ''}`}
             onClick={() => handleThumbnailClick(index)}
             style={{ backgroundImage: `url(${slide.image})` }}
           />
@@ -77,20 +86,10 @@ const Slider = () => {
       </div>
 
       <div className={styles.controlsleft}>
-        <button 
-          onClick={handlePrev} 
-          className={styles.arrowButton}
-        >
-          ‹
-        </button>
+        <button onClick={handlePrev} className={styles.arrowButton}>‹</button>
       </div>
       <div className={styles.controlsright}>
-        <button 
-          onClick={handleNext} 
-          className={styles.arrowButton}
-        >
-          ›
-        </button>
+        <button onClick={handleNext} className={styles.arrowButton}>›</button>
       </div>
 
       <div className={styles.descriptionContainer}>
