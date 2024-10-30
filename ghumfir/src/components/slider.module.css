@@ -2,16 +2,15 @@
   position: relative;
   width: 100vw;
   height: 100vh;
-  background-size: cover; /* Ensure the image covers the area properly */
+  background-size: cover;
   background-position: center;
-  background-repeat: no-repeat; /* Prevent repeating of the background */
+  background-repeat: no-repeat; 
   display: flex;
   align-items: center;
-  justify-content: space-between; /* Align items with space between */
-  transition: background-image 0.5s ease; /* Smooth transition for background */
-  background-color: #b3e0f7; /* Light blue background color */
+  justify-content: space-between;
+  transition: background-image 0.5s ease;
+  background-color: #b3e0f7; 
 }
-
 .thumbnailContainer {
   position: absolute;
   left: 10%;
@@ -23,22 +22,22 @@
 }
 
 .thumbnail {
-  width: 140px; /* Increased size */
-  height: 100px; /* Increased size */
+  width: 140px;
+  height: 100px;
   background-size: cover;
   background-position: center;
   cursor: pointer;
-  opacity: 0.7; /* Adjusted opacity for better visibility */
+  opacity: 0.7; 
   transition: opacity 0.3s ease, transform 0.3s ease;
   border: 2px solid transparent;
   border-radius: 8px;
-  border: 2px solid #a7d3e0; /* Sky blue border color */
+  border: 2px solid #a7d3e0; 
 }
 
 .thumbnail.active {
   opacity: 1;
-  transform: scale(1.2); /* Slightly increase scale on active */
-  border: 2px solid #f0f8ff; /* Highlight active thumbnail with a light color */
+  transform: scale(1.2);
+  border: 2px solid #f0f8ff; 
 }
 
 .controlsleft {
@@ -63,14 +62,14 @@
 
 .arrowButton {
   background: rgba(24, 208, 250, 0.4);
-  color: #bae5f7 !important; /* Sky blue color for text */
+  color: #bae5f7;
   border: none;
   font-size: 2rem;
   padding: 0.5rem 1rem;
   cursor: pointer;
   transition: background 0.3s ease;
   border-radius: 50%;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Added shadow for depth */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 }
 
 .arrowButton:hover {
@@ -79,27 +78,26 @@
 
 .descriptionContainer {
   position: absolute;
-  right: 10%; /* Position to the right */
-  top: 60%; /* Center vertically */
-  transform: translateY(-50%); /* Adjust vertical alignment */
+  right: 10%; 
+    top: 60%;
+  transform: translateY(-50%);
 } 
 
 .descriptionContainer h2 {
-  font-size: 3rem; /* Adjusted font size */
+  font-size: 3rem; 
   color: rgba(222, 244, 244, 0.7);
   margin: 0;
 }
 
 .descriptionContainer p {
-  font-size: 1rem; /* Adjusted font size */
+  font-size: 1rem; 
   margin-top: 0.5rem;
-  color: #022f33; /* Changed text color to dark for contrast */
-  text-align: left; /* Align text to the left */
-  padding: 1rem; /* Adjusted padding for a better fit */
-  background: rgba(173, 216, 230, 0.8); /* Light blue background for the description */
+  color: #022f33;
+  text-align: left; 
+  padding: 1rem;
+  background: rgba(173, 216, 230, 0.8);
   border-radius: 8px;
-  width: 280px; /* Fixed width */
-  height: 180px; /* Fixed height */
-  overflow: hidden; /* Hide overflow text */
-
+  width: 280px; 
+  height: 180px; 
+  overflow: hidden; 
 }
