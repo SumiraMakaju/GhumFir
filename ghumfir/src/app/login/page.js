@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google'; // import the necessary components
+import Link from 'next/link';
 import styles from './login.module.css';
 
 export default function LoginPage() {
@@ -164,9 +165,11 @@ export default function LoginPage() {
                 <label htmlFor="remember">Remember me</label>
               </div>
               <div style={{ marginTop: '15px' }}>
-                <button type="submit" className={styles.button}>
-                  Sign In
-                </button>
+              <Link href="/home">
+              <button type="button" style={buttonStyle}>
+                Sign In
+              </button>
+              </Link>
                 <a href="#" style={{ ...linkStyle, display: 'block', marginTop: '10px' }}>
                   Forgot password?
                 </a>
