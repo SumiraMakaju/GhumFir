@@ -1,7 +1,12 @@
-"use client";
-import React, { useState } from 'react';
+'use client';
 
-const SignupForm = () => {
+import { useState, useEffect } from 'react';
+import styles from './login.module.css';
+
+export default function SignupPage() {
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [animate, setAnimate] = useState(false);
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -11,6 +16,10 @@ const SignupForm = () => {
   const [success, setSuccess] = useState(false);
   const [isEmailConfirmed, setIsEmailConfirmed] = useState(false);
   const [isVerificationSent, setIsVerificationSent] = useState(false);
+
+  useEffect(() => {
+    setAnimate(true);
+  }, []);
 
   const validateForm = () => {
     const newErrors = {};
@@ -35,74 +44,6 @@ const SignupForm = () => {
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
-  };
-
-  //api check bro
-  const checkEmailExists = async (email) => {
-    try {
-      const response = await fetch(`/api/check-email?email=${email}`);
-      const data = await response.json();
-      return data.exists;
-    } catch (error) {
-      console.error('Error checking email:', error);
-      return false;
-    }
-  };
-
-  const sendVerificationCode = async () => {
-    try {
-      const response = await fetch('/api/send-verification-code', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ email }),
-      });
-      
-      if (response.ok) {
-        setIsVerificationSent(true);
-        return true;
-      }
-      return false;
-    } catch (error) {
-      console.error('Error sending verification code:', error);
-      return false;
-    }
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (validateForm()) {
-      try {
-        // Check if email already exists
-        const emailExists = await checkEmailExists(email);
-        if (emailExists) {
-          setErrors({ email: 'Email already registered' });
-          return;
-        }
-
-        const response = await fetch('/api/signup', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            username,
-            email,
-            password,
-          }),
-        });
-
-        if (response.ok) {
-          setSuccess(true);
-        } else {
-          const data = await response.json();
-          setErrors({ submit: data.message || 'Error creating account' });
-        }
-      } catch (error) {
-        setErrors({ submit: 'Error creating account' });
-      }
-    }
   };
 
   const handleVerifyEmail = async () => {
@@ -143,185 +84,333 @@ const SignupForm = () => {
     }
   };
 
-    ////////here
-    
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (validateForm()) {
+      try {
+        const response = await fetch('/api/signup', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            username,
+            email,
+            password,
+          }),
+        });
+
+        if (response.ok) {
+          setSuccess(true);
+        } else {
+          const data = await response.json();
+          setErrors({ submit: data.message || 'Error creating account' });
+        }
+      } catch (error) {
+        setErrors({ submit: 'Error creating account' });
+      }
+    }
+  };
+
+  // Styles
+  const containerStyle = {
+    display: 'flex',
+    minHeight: '100vh',
+    backgroundColor: 'white',
+  };
+
+  const imageStyle = {
+    flex: '0.6',
+    background: 'url("/machapuchrevector.jpg") no-repeat center center',
+    backgroundSize: 'cover',
+    transform: animate ? 'translateX(0)' : 'translateX(100%)', 
+    opacity: animate ? 1 : 0,
+    animation: animate ? 'slideInRight 1s ease-out' : 'none', 
+    borderTopLeftRadius: '50px', 
+    borderBottomLeftRadius: '50px', 
+    transition: 'transform 1.5s ease-out, opacity 2s ease-out',
+    position: 'relative',
+  };
+
+  const leftSideStyle = { 
+    flex: '0.4',
+    backgroundColor: 'white',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    position: 'relative',
+  };
+
+  const formBoxStyle = {
+    width: '800px',
+    backgroundColor: 'rgba(222, 244, 244, 0.7)',
+    color: '#333',
+    padding: '60px',
+    borderRadius: '8px',
+    boxShadow: '0 2px 10px rgba(0, 0, 0, 0.1)',
+    transform: animate ? 'scale(1)' : 'scale(0.8)',
+    opacity: animate ? 1 : 0,
+    animation: animate ? 'shake 0.5s ease-out, scaleIn 1s ease-out' : 'none',
+    position: 'relative',
+    zIndex: '2',
+  };
+  
+  const inputStyle = {
+    width: '100%',
+    padding: '10px',
+    marginTop: '5px',
+    backgroundColor: 'white',
+    color: '#333',
+    border: '1px solid #ccc',
+    borderRadius: '10px',
+  };
+
+  const labelStyle = {
+    display: 'block',
+    marginBottom: '5px',
+    color: '#333',
+    fontWeight: '500',
+  };
+
+  const buttonStyle = {
+    backgroundColor: '#0ea5e9',
+    color: 'white',
+    padding: '12px 25px',
+    border: 'none',
+    borderRadius: '4px',
+    cursor: 'pointer',
+    marginTop: '10px',
+    width: 'fit-content',
+  };
+
+  const iconStyle = {
+    position: 'absolute',
+    fontSize: '24px',
+    color: '#0ea5e9',
+    opacity: '0.7',
+    animation: 'float 3s ease-in-out infinite',
+    zIndex: '1',
+  };
+
   return (
-    <div style={{ maxWidth: '400px', margin: '2rem auto', padding: '1rem' }}>
-      <h2 style={{ fontSize: '1.5rem', fontWeight: 'bold', marginBottom: '1rem' }}>Sign Up</h2>
-      {success ? (
-        <div style={{ 
-          backgroundColor: '#d4edda', 
-          border: '1px solid #c3e6cb',
-          color: '#155724',
-          padding: '0.75rem',
-          borderRadius: '4px',
-          marginBottom: '1rem'
-        }}>
-          <p>Signup successful!</p>
-        </div>
-      ) : (
-        <form onSubmit={handleSubmit}>
-          <div style={{ marginBottom: '1rem' }}>
-            <label htmlFor="username" style={{ display: 'block', marginBottom: '0.5rem' }}>
-              Username
-            </label>
-            <input
-              id="username"
-              type="text"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              style={{
-                width: '100%',
-                padding: '0.5rem',
-                border: errors.username ? '1px solid #dc3545' : '1px solid #ced4da',
-                borderRadius: '4px'
-              }}
-            />
-            {errors.username && (
-              <p style={{ color: '#dc3545', fontSize: '0.875rem', marginTop: '0.25rem' }}>
-                {errors.username}
-              </p>
-            )}
-          </div>
-          <div style={{ marginBottom: '1rem' }}>
-            <label htmlFor="email" style={{ display: 'block', marginBottom: '0.5rem' }}>
-              Email
-            </label>
-            <input
-              id="email"
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              style={{
-                width: '100%',
-                padding: '0.5rem',
-                border: errors.email ? '1px solid #dc3545' : '1px solid #ced4da',
-                borderRadius: '4px'
-              }}
-            />
-            {errors.email && (
-              <p style={{ color: '#dc3545', fontSize: '0.875rem', marginTop: '0.25rem' }}>
-                {errors.email}
-              </p>
-            )}
-            {!isEmailConfirmed && (
-              <div style={{ marginTop: '0.5rem' }}>
-                <button
-                  type="button"
-                  onClick={handleVerifyEmail}
-                  style={{
-                    backgroundColor: '#007bff',
-                    color: 'white',
-                    padding: '0.5rem 1rem',
-                    borderRadius: '4px',
-                    border: 'none',
-                    cursor: 'pointer'
-                  }}
-                >
-                  {isVerificationSent ? 'Verify Code' : 'Send Verification Code'}
-                </button>
-                {isVerificationSent && (
-                  <input
-                    type="text"
-                    value={verificationCode}
-                    onChange={(e) => setVerificationCode(e.target.value)}
-                    placeholder="Enter verification code"
-                    style={{
-                      width: '100%',
-                      padding: '0.5rem',
-                      marginTop: '0.5rem',
-                      border: errors.verificationCode ? '1px solid #dc3545' : '1px solid #ced4da',
-                      borderRadius: '4px'
-                    }}
-                  />
-                )}
-                {errors.verificationCode && (
-                  <p style={{ color: '#dc3545', fontSize: '0.875rem', marginTop: '0.25rem' }}>
-                    {errors.verificationCode}
-                  </p>
-                )}
-              </div>
-            )}
-          </div>
-          <div style={{ marginBottom: '1rem' }}>
-            <label htmlFor="password" style={{ display: 'block', marginBottom: '0.5rem' }}>
-              Password
-            </label>
-            <input
-              id="password"
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              style={{
-                width: '100%',
-                padding: '0.5rem',
-                border: errors.password ? '1px solid #dc3545' : '1px solid #ced4da',
-                borderRadius: '4px'
-              }}
-            />
-            {errors.password && (
-              <p style={{ color: '#dc3545', fontSize: '0.875rem', marginTop: '0.25rem' }}>
-                {errors.password}
-              </p>
-            )}
-          </div>
-          <div style={{ marginBottom: '1rem' }}>
-            <label htmlFor="confirmPassword" style={{ display: 'block', marginBottom: '0.5rem' }}>
-              Confirm Password
-            </label>
-            <input
-              id="confirmPassword"
-              type="password"
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-              style={{
-                width: '100%',
-                padding: '0.5rem',
-                border: errors.confirmPassword ? '1px solid #dc3545' : '1px solid #ced4da',
-                borderRadius: '4px'
-              }}
-            />
-            {errors.confirmPassword && (
-              <p style={{ color: '#dc3545', fontSize: '0.875rem', marginTop: '0.25rem' }}>
-                {errors.confirmPassword}
-              </p>
-            )}
-          </div>
-          {errors.submit && (
+    <div style={containerStyle}>
+      <div style={leftSideStyle}>
+        <div style={formBoxStyle}>
+          <h1 style={{ color: '#333', fontSize: '28px', fontWeight: 'bold', marginBottom: '0' }}>
+            Join the Adventure!
+          </h1>
+          <p style={{ color: '#666', marginTop: '5px', marginBottom: '20px' }}>
+            Create your account to start exploring
+          </p>
+
+          {success ? (
             <div style={{ 
-              backgroundColor: '#f8d7da',
-              border: '1px solid #f5c6cb',
-              color: '#721c24',
+              backgroundColor: '#d4edda', 
+              border: '1px solid #c3e6cb',
+              color: '#155724',
               padding: '0.75rem',
               borderRadius: '4px',
               marginBottom: '1rem'
             }}>
-              <p>{errors.submit}</p>
+              <p>Welcome aboard! Your account has been created successfully.</p>
             </div>
+          ) : (
+            <form onSubmit={handleSubmit}>
+              {/* ... [Form fields remain the same] */}
+              <div style={{ marginBottom: '1rem' }}>
+                <label style={labelStyle}>Username</label>
+                <input
+                  type="text"
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
+                  style={inputStyle}
+                  placeholder="Choose your username"
+                />
+                {errors.username && (
+                  <p style={{ color: '#dc3545', fontSize: '0.875rem', marginTop: '0.25rem' }}>
+                    {errors.username}
+                  </p>
+                )}
+              </div>
+
+              <div style={{ marginBottom: '1rem' }}>
+                <label style={labelStyle}>Email</label>
+                <input
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  style={inputStyle}
+                  placeholder="Enter your email"
+                />
+                {errors.email && (
+                  <p style={{ color: '#dc3545', fontSize: '0.875rem', marginTop: '0.25rem' }}>
+                    {errors.email}
+                  </p>
+                )}
+                {!isEmailConfirmed && (
+                  <div style={{ marginTop: '0.5rem' }}>
+                    <button
+                      type="button"
+                      onClick={handleVerifyEmail}
+                      style={buttonStyle}
+                    >
+                      {isVerificationSent ? 'Verify Code' : 'Send Verification Code'}
+                    </button>
+                    {isVerificationSent && (
+                      <input
+                        type="text"
+                        value={verificationCode}
+                        onChange={(e) => setVerificationCode(e.target.value)}
+                        placeholder="Enter verification code"
+                        style={{ ...inputStyle, marginTop: '0.5rem' }}
+                      />
+                    )}
+                    {errors.verificationCode && (
+                      <p style={{ color: '#dc3545', fontSize: '0.875rem', marginTop: '0.25rem' }}>
+                        {errors.verificationCode}
+                      </p>
+                    )}
+                  </div>
+                )}
+              </div>
+
+              <div style={{ marginBottom: '1rem' }}>
+                <label style={labelStyle}>Password</label>
+                <div style={{ position: 'relative' }}>
+                  <input
+                    type={showPassword ? 'text' : 'password'}
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    style={inputStyle}
+                    placeholder="Create your password"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    style={{
+                      position: 'absolute',
+                      right: '10px',
+                      top: '50%',
+                      transform: 'translateY(-50%)',
+                      background: 'none',
+                      border: 'none',
+                      cursor: 'pointer',
+                    }}
+                  >
+                    {showPassword ? '👁️' : '👁️‍🗨️'}
+                  </button>
+                </div>
+                {errors.password && (
+                  <p style={{ color: '#dc3545', fontSize: '0.875rem', marginTop: '0.25rem' }}>
+                    {errors.password}
+                  </p>
+                )}
+              </div>
+
+              <div style={{ marginBottom: '1rem' }}>
+                <label style={labelStyle}>Confirm Password</label>
+                <div style={{ position: 'relative' }}>
+                  <input
+                    type={showConfirmPassword ? 'text' : 'password'}
+                    value={confirmPassword}
+                    onChange={(e) => setConfirmPassword(e.target.value)}
+                    style={inputStyle}
+                    placeholder="Confirm your password"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                    style={{
+                      position: 'absolute',
+                      right: '10px',
+                      top: '50%',
+                      transform: 'translateY(-50%)',
+                      background: 'none',
+                      border: 'none',
+                      cursor: 'pointer',
+                    }}
+                  >
+                    {showConfirmPassword ? '👁️' : '👁️‍🗨️'}
+                  </button>
+                </div>
+                {errors.confirmPassword && (
+                  <p style={{ color: '#dc3545', fontSize: '0.875rem', marginTop: '0.25rem' }}>
+                    {errors.confirmPassword}
+                  </p>
+                )}
+              </div>
+
+              {errors.submit && (
+                <div style={{ 
+                  backgroundColor: '#f8d7da',
+                  border: '1px solid #f5c6cb',
+                  color: '#721c24',
+                  padding: '0.75rem',
+                  borderRadius: '4px',
+                  marginBottom: '1rem'
+                }}>
+                  <p>{errors.submit}</p>
+                </div>
+              )}
+
+              <button type="submit" className={styles.button}>
+                Start Your Journey
+              </button>
+
+              <p style={{ marginTop: '20px', color: '#666' }}>
+                Already have an account? <a href="#" className={styles.button}>Sign in</a>
+              </p>
+            </form>
           )}
-          <button
-            type="submit"
-            style={{
-              width: '100%',
-              backgroundColor: '#007bff',
-              color: 'white',
-              padding: '0.5rem 1rem',
-              borderRadius: '4px',
-              border: 'none',
-              cursor: 'pointer'
-            }}
-          >
-            Sign Up
-          </button>
-        </form>
-      )}
+        </div>
+
+        {/* Floating icons */}
+        <div style={{ ...iconStyle, top: '5%', left: '10%' }}>✈️</div>
+        <div style={{ ...iconStyle, top: '15%', right: '20%' }}>🌍</div>
+        <div style={{ ...iconStyle, top: '25%', left: '5%' }}>🧳</div>
+        <div style={{ ...iconStyle, top: '35%', right: '30%' }}>🚀</div>
+        <div style={{ ...iconStyle, top: '50%', left: '25%' }}>🏝️</div>
+        <div style={{ ...iconStyle, bottom: '15%', right: '10%' }}>✈️</div>
+        <div style={{ ...iconStyle, bottom: '50%', right: '5%' }}>✈️</div>
+        <div style={{ ...iconStyle, bottom: '5%', left: '15%' }}>🌍</div>
+        <div style={{ ...iconStyle, bottom: '25%', right: '5%' }}>🧳</div>
+        <div style={{ ...iconStyle, bottom: '35%', left: '30%' }}>🚀</div>
+        <div style={{ ...iconStyle, bottom: '10%', right: '40%' }}>🏝️</div>
+        <div style={{ ...iconStyle, top: '10%', right: '40%' }}>🏝️</div>
+      </div>
+      <div style={imageStyle}></div>
+
+      {/* Animations */}
+      <style jsx>{`
+        @keyframes shake {
+          0% { transform: translateX(0); }
+          25% { transform: translateX(-5px); }
+          50% { transform: translateX(5px); }
+          75% { transform: translateX(-5px); }
+          100% { transform: translateX(0); }
+        }
+
+        @keyframes scaleIn {
+          0% {
+            transform: scale(0.8);
+            opacity: 0;
+          }
+          100% {
+            transform: scale(1);
+            opacity: 1;
+          }
+        }
+
+        @keyframes float {
+          0%, 100% { transform: translateY(0); }
+          50% { transform: translateY(-10px); }
+        }
+
+        @keyframes slideInRight {
+          0% { transform: translateX(100%); }
+          100% { transform: translateX(0); }
+        }
+      `}</style>
     </div>
   );
-};
-
-export default SignupForm;
-
-
-
-
-
+}
