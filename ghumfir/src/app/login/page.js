@@ -177,9 +177,12 @@ export default function LoginPage() {
             </form>
 
             <p style={{ marginTop: '20px', color: '#666' }}>
-              Don't have an account? <a href="#" className={styles.button}>Sign up</a>
-            </p>
-          </div>
+  Don't have an account? 
+  <Link href="/signup">
+    <span style={styles.link}>Sign up</span>  
+  </Link>
+</p>
+    </div>
 
           {/* icons */}
           <div style={{ ...iconStyle, top: '5%', left: '10%' }}>✈️</div>
