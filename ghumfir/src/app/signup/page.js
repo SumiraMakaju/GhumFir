@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import styles from './login.module.css';
+import Link from 'next/link';
 
 export default function SignupPage() {
   const [showPassword, setShowPassword] = useState(false);
@@ -358,7 +359,11 @@ export default function SignupPage() {
               </button>
 
               <p style={{ marginTop: '20px', color: '#666' }}>
-                Already have an account? <a href="#" className={styles.button}>Sign in</a>
+                Already have an account? <Link href="/login">
+              <button type="button" className={styles.button}>
+                Sign In
+              </button>
+              </Link>
               </p>
             </form>
           )}
