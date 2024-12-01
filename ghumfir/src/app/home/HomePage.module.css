@@ -1,3 +1,4 @@
+
 .header {
     display: flex;
     justify-content: space-between;
@@ -67,16 +68,17 @@
     display: flex;
     align-items: center;
     gap: 15px;
+    color: #007bff;
 }
 
-.profileMenu span {
-    color: #333; /* Black for static text */
+.profileMenu a:hover {
+    color: #0056b3; /* Darker blue on hover */
 }
 
 .profileDropdown {
     position: relative;
     cursor: pointer;
-    color: #333; /* Black dropdown text */
+    color: #007bff;  
 }
 
 .dropdownContent {
