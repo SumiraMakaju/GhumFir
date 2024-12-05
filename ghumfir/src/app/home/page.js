@@ -23,8 +23,8 @@ const HomePage = () => {
                     <a href="#">More</a>
                 </nav>
                 <div className={styles.profileMenu}>
-                    <span>Notifications</span>
-                    <span>Messages</span>
+                <a href="#">Notifications</a>
+                <a href="#">Messages</a>
                     <div className={styles.profileDropdown}>
                         <span>Profile</span>
                         <div className={styles.dropdownContent}>
