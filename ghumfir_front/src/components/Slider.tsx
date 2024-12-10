@@ -100,12 +100,12 @@ const Slider = () => {
     setActiveIndex(prevIndex => (prevIndex - 1 + slides.length) % slides.length);
   }, []);
 
-  const handleThumbnailClick = useCallback((index) => {
+  const handleThumbnailClick = useCallback((index: number) => {
     setActiveIndex(index);
   }, []);
 
   useEffect(() => {
-    const handleKeyDown = (event) => {
+    const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === 'ArrowRight' || event.key === 'ArrowDown') handleNext();
       if (event.key === 'ArrowLeft' || event.key === 'ArrowUp') handlePrev();
     };

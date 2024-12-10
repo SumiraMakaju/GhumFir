@@ -13,7 +13,7 @@ generator client {
 datasource db {
   provider  = "postgresql"
   url  	    = env("POSTGRES_PRISMA_URL")
-  directUrl = env("POSTGRES_URL_NON_POOLING")
+ 
   
 }
 
@@ -37,7 +37,7 @@ model Session{
   id String @id
   userId String
   expiresAt DateTime
-  User User @relation(fields: [userId], references: [id])
+  user User @relation(fields: [userId], references: [id])
 
   @@map("sessions")
 }
