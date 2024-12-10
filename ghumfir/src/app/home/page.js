@@ -1,6 +1,9 @@
 import React from 'react';
-import styles from './HomePage.module.css';
+import styles from './home.module.css';
+import axios from 'axios';
 
+
+  
 const HomePage = () => {
     return (
         <div className={styles.container}>

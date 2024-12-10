@@ -17,8 +17,16 @@ export default function SignupPage() {
   const [success, setSuccess] = useState(false);
   const [isEmailConfirmed, setIsEmailConfirmed] = useState(false);
   const [isVerificationSent, setIsVerificationSent] = useState(false);
+  const [csrfToken, setCsrfToken] = useState('');
 
   useEffect(() => {
+    const loadCSRFToken = async () => {
+      const { getCSRFToken } = await import('../page');
+      const token = getCSRFToken();
+      setCsrfToken(token);
+    };
+    loadCSRFToken();
+
     setAnimate(true);
   }, []);
 
@@ -47,6 +55,34 @@ export default function SignupPage() {
     return Object.keys(newErrors).length === 0;
   };
 
+  const sendVerificationCode = async () => {
+    console.log('sendVerificationCode');
+    try {
+      const response = await fetch('http://localhost:8000/api/send-verification-code/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRFToken': localStorage.getItem('csrftoken'),
+        },
+        body: JSON.stringify({ email }),
+      });
+
+      const data = await response.json();
+      if (response.ok) {
+        setIsVerificationSent(true);
+        setErrors({});
+        return true;
+      } else {
+        setErrors({ verificationCode: data.message || 'Error sending verification code' });
+        return false;
+      }
+    } catch (error) {
+      setErrors({ verificationCode: 'Error sending verification code' });
+      return false;
+    }
+  };
+
+
   const handleVerifyEmail = async () => {
     if (!isVerificationSent) {
       const sent = await sendVerificationCode();
@@ -62,7 +98,7 @@ export default function SignupPage() {
     }
 
     try {
-      const response = await fetch('/api/verify-email', {
+      const response = await fetch('http://localhost:8000/api/verify-email/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -89,7 +125,7 @@ export default function SignupPage() {
     e.preventDefault();
     if (validateForm()) {
       try {
-        const response = await fetch('/api/signup', {
+        const response = await fetch('http://localhost:8000/api/signup/', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

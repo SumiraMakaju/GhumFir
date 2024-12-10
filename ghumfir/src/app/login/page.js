@@ -4,19 +4,113 @@ import { useState, useEffect } from 'react';
 import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google'; // import the necessary components
 import Link from 'next/link';
 import styles from './login.module.css';
+import { useRouter } from 'next/navigation';
+import axios from 'axios';
+import { get } from 'http';
+// import { getCSRFToken } from '../home/page';
+
 
 export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [animate, setAnimate] = useState(false);
-
+  const router = useRouter();
+  const [Useremail, setEmail] = useState('');
+  const [Userpassword, setPassword] = useState('');
+  const [errors, setErrors] = useState({});
+  const [csrftoken, setCsrfToken] = useState();
   useEffect(() => {
+    const loadCSRFToken = async () => {
+      const { getCSRFToken } = await import('../page');
+      const token = getCSRFToken();
+      setCsrfToken(token);
+    };
+    if(!localStorage.getItem('csrftoken')) {
+    loadCSRFToken();
+  }else{
+    setCsrfToken(localStorage.getItem('csrftoken'));
+  }
     setAnimate(true);
+    
   }, []);
+
 
   const containerStyle = {
     display: 'flex',
     minHeight: '100vh',
     backgroundColor: 'white',
+  };
+
+  const validateForm = () => {
+    const newErrors = {};
+    // Email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!Useremail) {
+      newErrors.email = 'Email is required';
+      alert('Email is required');
+    } else if (!emailRegex.test(Useremail)) {
+      newErrors.email = 'Invalid email format';
+      alert('Invalid email format');
+    }
+
+    // Password validation
+    if (!Userpassword) {
+      newErrors.password = 'Password is required';
+      alert('Password is required');
+    } else if (Userpassword.length < 8) {
+      newErrors.password = 'Password must be at least 8 characters';
+      alert('Password must be at least 8 characters');
+    }
+
+    return Object.keys(newErrors).length === 0;
+  };
+
+   
+
+  const handleSignin = async (e) => {
+    e.preventDefault(); // Prevent default form submission
+    console.log("sign in clicked");
+
+    // this is to be used for production (uncomment the code below)
+
+    // if (!validateForm()) {
+    //   return; // Stop if validation fails
+    // } 
+    
+  
+    try {
+      const response = await fetch('http://localhost:8000/api/login/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRFToken': csrftoken,
+        },
+        body: JSON.stringify({
+          email,
+          password,
+        }),
+      });
+  
+      if (!response.ok) {
+        // Handle login errors
+        const errorData = await response.json();
+        setErrors(prevErrors => ({
+          ...prevErrors,
+          server: errorData.message || 'Login failed'
+        }));
+        return;
+      }
+  
+      // Successful login
+      const data = await response.json();
+      // Store token, user info, etc.
+      router.push('/home');
+    } catch (error) {
+      // Network error or other issues
+      setErrors(prevErrors => ({
+        ...prevErrors,
+        server: 'An error occurred. Please try again.'
+      }));
+    }
   };
 
   const imageStyle = {
@@ -132,9 +226,11 @@ export default function LoginPage() {
             <h1 style={titleStyle}>Welcome Back, Traveller!</h1>
             <p style={subtitleStyle}>Please sign in to continue</p>
 
-            <form>
+            <form >
               <label style={labelStyle}>Email</label>
-              <input type="email" placeholder="Enter your email" style={inputStyle} />
+              <input type="email" placeholder="Enter your email" style={inputStyle} 
+              onChange={(e) => setEmail(e.target.value)}
+              />
 
               <label style={labelStyle}>Password</label>
               <div style={{ position: 'relative' }}>
@@ -142,6 +238,7 @@ export default function LoginPage() {
                   type={showPassword ? 'text' : 'password'}
                   placeholder="Enter your password"
                   style={inputStyle}
+                  onChange={(e) => setPassword(e.target.value)}
                 />
                 <button
                   type="button"
@@ -165,11 +262,10 @@ export default function LoginPage() {
                 <label htmlFor="remember">Remember me</label>
               </div>
               <div style={{ marginTop: '15px' }}>
-              <Link href="/home">
-              <button type="button" style={buttonStyle}>
+              
+              <button type="button" onClick={handleSignin} style={buttonStyle}>
                 Sign In
               </button>
-              </Link>
                 <a href="#" style={{ ...linkStyle, display: 'block', marginTop: '10px' }}>
                   Forgot password?
                 </a>
