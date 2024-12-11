@@ -25,12 +25,10 @@ export async function signUp(
 
     const userId = generateIdFromEntropySize(10);
 
-    const existingUsername = await prisma.user.findFirst({
+    console.log(prisma);
+    const existingUsername = await prisma.user.findUnique({
       where: {
-        username: {
-          equals: username,
-          mode: "insensitive",
-        },
+        username: username,
       },
     });
 
@@ -40,12 +38,9 @@ export async function signUp(
       };
     }
 
-    const existingEmail = await prisma.user.findFirst({
+    const existingEmail = await prisma.user.findUnique({
       where: {
-        email: {
-          equals: email,
-          mode: "insensitive",
-        },
+        email: email,
       },
     });
 
@@ -54,22 +49,27 @@ export async function signUp(
         error: "Email already taken",
       };
     }
-
+  
     await prisma.$transaction(async (tx) => {
-      await tx.user.create({
-        data: {
+      try {
+        await tx.user.create({
+          data: {
+            id: userId,
+            username,
+            displayName: username,
+            email,
+            passwordHash,
+          },
+        });
+        await streamServerClient.upsertUser({
           id: userId,
           username,
-          displayName: username,
-          email,
-          passwordHash,
-        },
-      });
-      await streamServerClient.upsertUser({
-        id: userId,
-        username,
-        name: username,
-      });
+          name: username,
+        });
+      } catch (error) {
+        console.error('Transaction failed:', error);
+        throw error; // Ensures rollback
+      }
     });
 
     const session = await lucia.createSession(userId, {});
