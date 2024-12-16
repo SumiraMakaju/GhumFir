@@ -98,6 +98,8 @@ export default function LoginPage() {
           server: errorData.message || 'Login failed'
         }));
         return;
+      }else{
+        console.log(response);
       }
   
       // Successful login

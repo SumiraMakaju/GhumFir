@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import styles from './login.module.css';
 import Link from 'next/link';
+import { globalFetch } from '../page';
 
 export default function SignupPage() {
   const [showPassword, setShowPassword] = useState(false);
@@ -58,12 +59,8 @@ export default function SignupPage() {
   const sendVerificationCode = async () => {
     console.log('sendVerificationCode');
     try {
-      const response = await fetch('http://localhost:8000/api/send-verification-code/', {
+      const response = await globalFetch('http://localhost:8000/api/send-verification-code/', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'X-CSRFToken': localStorage.getItem('csrftoken'),
-        },
         body: JSON.stringify({ email }),
       });
 
@@ -98,11 +95,8 @@ export default function SignupPage() {
     }
 
     try {
-      const response = await fetch('http://localhost:8000/api/verify-email/', {
+      const response = await globalFetch('http://localhost:8000/api/verify-email/', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
         body: JSON.stringify({
           email,
           code: verificationCode,
@@ -127,8 +121,11 @@ export default function SignupPage() {
       try {
         const response = await fetch('http://localhost:8000/api/signup/', {
           method: 'POST',
+          credentials: 'include',
           headers: {
+            
             'Content-Type': 'application/json',
+            'X-CSRFToken': csrfToken,
           },
           body: JSON.stringify({
             username,

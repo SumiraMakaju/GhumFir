@@ -23,12 +23,27 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  
+
   return (
+
     <html lang="en">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         {children}
+        <script
+            dangerouslySetInnerHTML={{
+              __html: `
+                window.addEventListener('beforeunload', function() {
+                  localStorage.clear(); // Clears localStorage on page reload
+                });
+                window.addEventListener('unload', function() {
+                  localStorage.clear(); // Clears localStorage on tab close or navigation
+                });
+              `,
+            }}
+          />
       </body>
     </html>
   );

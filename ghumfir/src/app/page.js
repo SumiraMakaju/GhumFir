@@ -2,32 +2,56 @@ import Head from 'next/head';
 import Slider from '../components/Slider';
 import Link from 'next/link';
 import styles from '../components/landing.module.css';
-import axios from 'axios';
 
 export const getCSRFToken = async () => {
+  if (localStorage.getItem('csrftoken')) {
+    return localStorage.getItem('csrftoken');
+  }
   try {
-    // Check if token is already in localStorage
-    const storedToken = localStorage.getItem('csrftoken');
-    if (storedToken) {
-      return storedToken;
+    const name = "csrftoken=";
+  const cookieArr = document.cookie.split(";");
+
+  for (let i = 0; i < cookieArr.length; i++) {
+    let cookie = cookieArr[i].trim();
+
+    if (cookie.indexOf(name) === 0) {
+      localStorage.setItem('csrftoken', cookie.substring(name.length, cookie.length));
+    }
+  }
+  return null;
+  }catch(err){
+    console.log(err);
+  }
+};
+
+export const globalFetch = async (url, options = {}) => {
+  try {
+    // Get CSRF token from cookies
+    const csrfToken = getCSRFToken(); // Use a cookie extraction utility
+
+    // Set headers
+    const headers = {
+      "Accept": "application/json, text/plain, */*",
+      "Content-Type": "application/json",
+      "X-CSRFToken": csrfToken || "", // Include CSRF token
+      ...options.headers, // Merge custom headers
+    };
+
+    // Make the request
+    const response = await fetch(url, {
+      ...options,
+      headers,
+      credentials: 'include', // Required for cookie-based authentication
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP Error: ${response.status}`);
     }
 
-    // Fetch CSRF token from the backend
-    const response = await axios.get('/api/get_csrf/');
-    
-    if (response.status === 200) {
-      const csrfToken = response.data?.csrfToken; // Adjust based on response format
-      if (csrfToken) {
-        // Cache token in localStorage
-        localStorage.setItem('csrftoken', csrfToken);
-        return csrfToken;
-      }
-      throw new Error('Invalid CSRF token format');
-    }
-    throw new Error(`Unexpected status code: ${response.status}`);
+    return response;
   } catch (error) {
-    console.error('Error fetching CSRF token:', error);
-    return null; // Return null if token cannot be fetched
+    console.error('Global Fetch Error:', error);
+    throw error;
   }
 };
 
