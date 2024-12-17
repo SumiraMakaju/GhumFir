@@ -1,7 +1,7 @@
-{//import { validateRequest } from "@/auth";
-//import { redirect } from "next/navigation";
-//import SessionProvider from "../SessionProvider";
-}
+import { validateRequest } from "@/auth";
+import { redirect } from "next/navigation";
+import SessionProvider from "../SessionProvider";
+
 
 import MenuBar from "../MenuBar";
 import Navbar from "../Navbar";
@@ -11,12 +11,12 @@ export default async function layout({
 }:{
     children: React.ReactNode;
 }) {
-   //const session = await validateRequest();
+   const session = await validateRequest();
 
-   // if (!session.user) redirect("/login");
+    if (!session.user) redirect("/login");
 
     return (
-   //<SessionProvider value={session}>
+   <SessionProvider value={session}>
         <div className="flex min-h-screen flex-col">
         <Navbar />
             <div className="mx-auto max-w-7xl p-5 flex w-full grow gap-5">
@@ -26,6 +26,6 @@ export default async function layout({
          <MenuBar className="sticky bottom-0 flex w-full justify-center gap-5 border-t bg-card p-3 sm:hidden"/>
 
          </div>
-    // </SessionProvider>
+    </SessionProvider>
     );
 }

@@ -1,0 +1,2 @@
+{//for deleting post
+    }
