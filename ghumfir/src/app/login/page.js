@@ -78,32 +78,20 @@ export default function LoginPage() {
     
   
     try {
-      const response = await fetch('http://localhost:8000/api/login/', {
+      const response = await axios({
+        url:'http://localhost:8000/api/login/', 
         method: 'POST',
+        withCredentials: true,
         headers: {
           'Content-Type': 'application/json',
           'X-CSRFToken': csrftoken,
         },
-        body: JSON.stringify({
+        data: {
           email,
           password,
-        }),
+        }
       });
-  
-      if (!response.ok) {
-        // Handle login errors
-        const errorData = await response.json();
-        setErrors(prevErrors => ({
-          ...prevErrors,
-          server: errorData.message || 'Login failed'
-        }));
-        return;
-      }else{
-        console.log(response);
-      }
-  
-      // Successful login
-      const data = await response.json();
+      console.log('Login response:', response.data);
       // Store token, user info, etc.
       router.push('/home');
     } catch (error) {

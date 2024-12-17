@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import styles from './login.module.css';
 import Link from 'next/link';
 import { globalFetch } from '../page';
+import axios from 'axios';
 
 export default function SignupPage() {
   const [showPassword, setShowPassword] = useState(false);
@@ -57,24 +58,38 @@ export default function SignupPage() {
   };
 
   const sendVerificationCode = async () => {
-    console.log('sendVerificationCode');
     try {
-      const response = await globalFetch('http://localhost:8000/api/send-verification-code/', {
+      const response = await axios({
+        url: 'http://localhost:8000/api/send-verification-code/', 
         method: 'POST',
-        body: JSON.stringify({ email }),
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        data: { email }, 
       });
+      
+      setIsVerificationSent(true);
+      setErrors({});
+      return true;
 
-      const data = await response.json();
-      if (response.ok) {
-        setIsVerificationSent(true);
-        setErrors({});
-        return true;
-      } else {
-        setErrors({ verificationCode: data.message || 'Error sending verification code' });
-        return false;
-      }
     } catch (error) {
-      setErrors({ verificationCode: 'Error sending verification code' });
+      console.error('Full error:', error);
+      
+      if (error.response) {
+        // Server responded with an error status
+        console.log('Error response:', error.response.data);
+        setErrors({ 
+          verificationCode: error.response.data.message || 'Error sending verification code' 
+        });
+      } else if (error.request) {
+        // Request made but no response received
+        console.log('No response:', error.request);
+        setErrors({ verificationCode: 'No response from server' });
+      } else {
+        // Something else went wrong
+        console.log('Error:', error.message);
+        setErrors({ verificationCode: 'Error sending verification code' });
+      }
       return false;
     }
   };
@@ -95,23 +110,34 @@ export default function SignupPage() {
     }
 
     try {
-      const response = await globalFetch('http://localhost:8000/api/verify-email/', {
+      const response = await axios({
+        url: 'http://localhost:8000/api/verify-email/',
         method: 'POST',
-        body: JSON.stringify({
+        data: {
           email,
           code: verificationCode,
-        }),
+        },
       });
 
-      const data = await response.json();
-      if (response.ok) {
-        setIsEmailConfirmed(true);
-        setErrors({});
-      } else {
-        setErrors({ verificationCode: data.message || 'Invalid verification code' });
-      }
+      // Axios success response will not throw an error
+      // Use response.data to access the response body
+      setIsEmailConfirmed(true);
+      setErrors({});
     } catch (error) {
-      setErrors({ verificationCode: 'Error verifying email' });
+      // Handle error responses from the server
+      if (error.response) {
+        // The request was made and the server responded with a status code
+        // that falls out of the range of 2xx
+        setErrors({ 
+          verificationCode: error.response.data.message || 'Invalid verification code' 
+        });
+      } else if (error.request) {
+        // The request was made but no response was received
+        setErrors({ verificationCode: 'No response from server' });
+      } else {
+        // Something happened in setting up the request that triggered an Error
+        setErrors({ verificationCode: 'Error verifying email' });
+      }
     }
   };
 
@@ -119,21 +145,21 @@ export default function SignupPage() {
     e.preventDefault();
     if (validateForm()) {
       try {
-        const response = await fetch('http://localhost:8000/api/signup/', {
+        const response = await axios({
+          url: 'http://localhost:8000/api/signup/',
           method: 'POST',
-          credentials: 'include',
+          withCredentials: true, // equivalent to credentials: 'include'
           headers: {
-            
             'Content-Type': 'application/json',
             'X-CSRFToken': csrfToken,
           },
-          body: JSON.stringify({
+          data: {
             username,
             email,
             password,
-          }),
+          },
         });
-
+        
         if (response.ok) {
           setSuccess(true);
         } else {
