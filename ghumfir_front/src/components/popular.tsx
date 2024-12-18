@@ -12,6 +12,7 @@ import prisma
 import { formatNumber } from "@/lib/utils";
 import FollowButton from "./FollowButton";
 import { getUserDataSelect } from "@/lib/types";
+import UserTooltip from "./UserToolTip";
 export default function Popular() {
   return (
     <div className="sticky top -[5.25rem] hidden h-fit w-72 flex-none space-y-5 md:block lg:w-80">
@@ -49,6 +50,7 @@ async function WhoToFollow(){
           <div className="text-xl font-bold">{"Let's travel together!"}</div>
           {userstofollow && userstofollow.map((user) => (
             <div key={user.id} className="flex items-center justify-between gap-3">
+              <UserTooltip user={user}>
                 <Link
                   href={`/home/users/${user.username}`}
                   className="flex items-center gap-3"
@@ -63,6 +65,7 @@ async function WhoToFollow(){
                     </p>
                   </div>
                 </Link>
+                </UserTooltip>
                 <FollowButton
                 userId={user.id}
                 initialState={{
