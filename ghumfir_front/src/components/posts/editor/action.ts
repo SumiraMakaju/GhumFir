@@ -3,7 +3,8 @@
 import { validateRequest } from "@/auth"
 import { createPostSchema } from "@/lib/validation";
 import prisma from "@/lib/prisma";
-import { postDatainclude } from "@/lib/types";
+import { getPostDatainclude } from "@/lib/types";
+
 
 export async function submitPost(input: string){
     const {user} = await validateRequest();
@@ -17,7 +18,7 @@ export async function submitPost(input: string){
                 content,
                 userId:user.id,
             },
-            include: postDatainclude,
+            include: getPostDatainclude(user.id),
         });
 
         return newPost;

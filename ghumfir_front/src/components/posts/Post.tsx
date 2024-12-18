@@ -1,29 +1,36 @@
 import { PostData as Data } from "@/lib/types";
 import UserAvatar from "../UserAvatar";
-import Link from 'next/link';
+import Link from "next/link";
 import { formatRelativeDate } from "@/lib/utils";
+import { useSession } from "@/app/(main)/SessionProvider";
+import PostMore from "./postmore";
 
 interface PostProps {
   post: Data;
 }
 
-export default function Post({post}: PostProps) {
-    return <article className="space-y-2 rounded-3xl bg-card p-5 shadow-md">
+export default function Post({ post }: PostProps) {
+  const { user } = useSession();
+
+  return (
+    <article className="group/post space-y-3 rounded-3xl bg-card p-5 shadow-md">
+      <div className="flex justify-between gap-3">
         <div className="flex flex-wrap gap-3">
-            <Link href={`/user/${post.user.username}`}>
+          <Link href={`/home/users/${user.username}`} className="flex items-center gap-3">
             <UserAvatar avatarUrl={post.user.avatarUrl} />
-            </Link>
             <div className="flex flex-col">
-                <Link href={`/user/${post.user.username}`} className="font-bold">
-                    {post.user.username}
-                </Link>
-                <Link
-                href={`/post/${post.id}`}
-                className="text-muted-foreground text-sm hover:underline-offset-2">
-                    {formatRelativeDate(new Date(post.createdAt))}
-                </Link>
+              <span className="font-bold">{post.user.username}</span>
+              <span className="text-muted-foreground text-sm hover:underline-offset-2">
+                {formatRelativeDate(new Date(post.createdAt))}
+              </span>
             </div>
+          </Link>
         </div>
-        <div className=" whitespace-pre-line break-words">{post.content}</div>
+        {post.user.id === user.id && (
+          <PostMore post={post} className="opacity-0 transition-opacity group-hover/post:opacity-100" />
+        )}
+      </div>
+      <div className="whitespace-pre-line break-words">{post.content}</div>
     </article>
+  );
 }

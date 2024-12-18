@@ -1,15 +1,17 @@
 import { validateRequest } from "@/auth";
-import { userDataSelect } from "@/lib/types";
+
 import { Loader2 } from "lucide-react";
 import { Suspense } from "react";
 import Link from "next/link";
 import UserAvatar from "./UserAvatar";
-import { Button } from "./ui/button";
+
 import { unstable_cache } from "next/cache";
 
 import prisma
  from "@/lib/prisma";
 import { formatNumber } from "@/lib/utils";
+import FollowButton from "./FollowButton";
+import { getUserDataSelect } from "@/lib/types";
 export default function Popular() {
   return (
     <div className="sticky top -[5.25rem] hidden h-fit w-72 flex-none space-y-5 md:block lg:w-80">
@@ -32,9 +34,14 @@ async function WhoToFollow(){
         where:{
             NOT:{
                 id: user.id
-            }
+            },
+            followers:{
+                none:{
+                    followerId: user.id,
+                },
         },
-        select: userDataSelect,
+      },
+        select: getUserDataSelect(user.id),
         take: 5
     })
     return (
@@ -43,7 +50,7 @@ async function WhoToFollow(){
           {userstofollow && userstofollow.map((user) => (
             <div key={user.id} className="flex items-center justify-between gap-3">
                 <Link
-                  href={`/users/${user.username}`}
+                  href={`/home/users/${user.username}`}
                   className="flex items-center gap-3"
                 >
                   <UserAvatar avatarUrl={user.avatarUrl} className="flex-none" />
@@ -56,7 +63,16 @@ async function WhoToFollow(){
                     </p>
                   </div>
                 </Link>
-                <Button>Follow</Button>
+                <FollowButton
+                userId={user.id}
+                initialState={{
+                  followers: user._count?.followers || 0,
+                  isFollowedByUser: !!user.followers.some(
+                    ({followerId}) => followerId === user.id,
+                ),
+                }}/>
+
+                
               
             </div>
           ))}

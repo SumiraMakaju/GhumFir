@@ -51,7 +51,7 @@ export async function login(
       sessionCookie.attributes,
     );
 
-    return redirect("/home");
+    return redirect("/home"); //check this outtt
   } catch (error) {
     if (isRedirectError(error)) throw error;
     console.error(error);

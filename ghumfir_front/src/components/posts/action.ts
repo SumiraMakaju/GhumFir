@@ -2,6 +2,7 @@
 
 import { validateRequest } from "@/auth"
 import prisma from "@/lib/prisma";
+import { getPostDatainclude } from "@/lib/types";
 
 export async function deletePost(id:string){
     const {user} = await validateRequest();
@@ -16,7 +17,10 @@ export async function deletePost(id:string){
 
     if(post.userId !== user.id) throw new Error("Unauthorized");
 
-    await prisma.post.delete({
+    const deletedpost = await prisma.post.delete({
         where:{id},
+        include: getPostDatainclude(user.id),
     });
+
+    return deletedpost;
 }

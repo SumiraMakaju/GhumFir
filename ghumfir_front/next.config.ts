@@ -8,10 +8,5 @@ const nextConfig: NextConfig = {
     },
     serverExternalPackages: ["@node-rs/argon2"], 
 };
-module.exports = {
-  images: {
-    domains: ['example.com'], // Add the domain here
-  },
-}
 
 export default nextConfig;

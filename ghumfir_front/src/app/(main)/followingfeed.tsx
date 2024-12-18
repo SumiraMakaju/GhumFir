@@ -1,16 +1,15 @@
 "use client";
 
-import {  PostsPage } from "@/lib/types";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { Loader2 } from "lucide-react";
 import Post from "@/components/posts/Post";
 import kyInstance from "@/lib/ky";
-//import { Button } from "@/components/ui/button";
+import { PostsPage } from "@/lib/types";
 import InfiniteLoad from "@/components/ui/infiniteload";
 import PostsLoading from "@/components/posts/Loading";
-//import Delete from "@/components/posts/delete";
 
-export default function ForYou() {
+
+export default function Following() {
 
 
     const {
@@ -21,9 +20,9 @@ export default function ForYou() {
         isFetchingNextPage,
         status,
     } = useInfiniteQuery({
-        queryKey: ["post-feed", "for-you"],
+        queryKey: ["post-feed", "following"],
         queryFn: ({pageParam})=> kyInstance.get(
-            "/api/posts/for-you",
+            "/api/posts/following",
             pageParam ? {searchParams: {cursor: pageParam}} : {}
         ).json<PostsPage>(),
         initialPageParam: null as string | null,
