@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { Bell, Home, Hotel, Mail } from "lucide-react";
+import { Bell, Home, Hotel, MessageCircleHeartIcon } from "lucide-react";
 
 interface MenuBarProps {
   className?: string;
@@ -40,7 +40,7 @@ export default function MenuBar({ className }: MenuBarProps) {
         asChild
       >
         <Link href="/Messages">
-          <Mail />
+          <MessageCircleHeartIcon />
           <span className="hidden lg:inline">Messages</span>
         </Link>
       </Button>

@@ -15,12 +15,12 @@ export default function UserAvatar({
 }: UserAvatarProps) {
   return (
     <Image
-  src={avatarUrl || "/avatar.webp"} // Use a string path for static assets
+  src={avatarUrl || "/avatar.png"} // Use a string path for static assets
   alt="User avatar"
   width={size ?? 40}
   height={size ?? 40}
   className={cn(
-    "aspect-square h-fit flex-none rounded-full bg-secondary object-cover",
+    "aspect-square h-fit flex-none rounded-full bg-slate-400 object-cover",
     className,
   )}
 />
