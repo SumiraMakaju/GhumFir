@@ -1,16 +1,16 @@
 import { validateRequest } from "@/auth";
 import prisma from "@/lib/prisma";
-import { getPostDatainclude, PostsPage } from "@/lib/types";
+import { CommentsPage, getCommentDataInclude } from "@/lib/types";
 import { NextRequest } from "next/server";
 
 export async function GET(
   req: NextRequest,
-  context: { params: Promise<{ userId: string }> }
+  { params: { postId } }: { params: { postId: string } },
 ) {
   try {
-    const { userId } = await context.params;
     const cursor = req.nextUrl.searchParams.get("cursor") || undefined;
-    const pageSize = 10;
+
+    const pageSize = 5;
 
     const { user } = await validateRequest();
 
@@ -18,19 +18,19 @@ export async function GET(
       return Response.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const posts = await prisma.post.findMany({
-      where: { userId },
-      include: getPostDatainclude(user.id),
-      orderBy: { createdAt: "desc" },
-      take: pageSize + 1,
+    const comments = await prisma.comment.findMany({
+      where: { postId },
+      include: getCommentDataInclude(user.id),
+      orderBy: { createdAt: "asc" },
+      take: -pageSize - 1,
       cursor: cursor ? { id: cursor } : undefined,
     });
 
-    const nextCursor = posts.length > pageSize ? posts[pageSize].id : null;
+    const previousCursor = comments.length > pageSize ? comments[0].id : null;
 
-    const data: PostsPage = {
-      posts: posts.slice(0, pageSize),
-      nextCursor,
+    const data: CommentsPage = {
+      comments: comments.length > pageSize ? comments.slice(1) : comments,
+      previousCursor,
     };
 
     return Response.json(data);

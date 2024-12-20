@@ -54,9 +54,6 @@ export default function ForYou() {
             <Post key={post.id} post={post} />
         ))}
        {isFetchingNextPage && <Loader2 className="mx-auto animate-spin" />}
-        
-        
-        
         </InfiniteLoad>
     );
 }

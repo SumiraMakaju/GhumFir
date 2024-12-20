@@ -2,10 +2,10 @@
 import PostEditor from "@/components/posts/editor/PostEditor";
 
 import Popular from "@/components/popular";
-import ForYou from "../ForYou";
+import ForYou from "./ForYou";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { TabsContent } from "@radix-ui/react-tabs";
-import Following from "../followingfeed";
+import Following from "./followingfeed";
 export default async function homepage
 (){
     return (
@@ -24,9 +24,10 @@ export default async function homepage
             <Following/>
         </TabsContent>
     </Tabs>
-    <ForYou />
         </div>
-        <Popular/>
+        <aside className="hidden lg:block sticky top-5 h-fit lg:w-80">
+                <Popular />
+            </aside>
         </main>
     );
 }

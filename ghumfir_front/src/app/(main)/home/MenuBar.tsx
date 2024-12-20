@@ -6,7 +6,7 @@ interface MenuBarProps {
   className?: string;
 }
 
-export default function MenuBar({ className }: MenuBarProps) {
+export default async function MenuBar({ className }: MenuBarProps) {
   return (
     <div className={className}>
       <Button
