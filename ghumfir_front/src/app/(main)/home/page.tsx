@@ -25,7 +25,7 @@ export default async function homepage
         </TabsContent>
     </Tabs>
         </div>
-        <aside className="hidden lg:block sticky top-5 h-fit lg:w-80">
+        <aside className="sticky top-[5.25rem] hidden lg:block h-fit lg:w-80">
                 <Popular />
             </aside>
         </main>

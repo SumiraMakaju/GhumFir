@@ -25,7 +25,7 @@ export default function Post({ post }: PostProps) {
       <div className="flex justify-between gap-3">
         <div className="flex flex-wrap gap-3">
          <UserTooltip user={post.user}>
-          <Link href={`/home/users/${user.username}`} className="flex items-center gap-3 hover:underline">
+          <Link href={`/home/users/${post.user.username}`} className="flex items-center gap-3 hover:underline">
             <UserAvatar avatarUrl={post.user.avatarUrl} />
             <div className="flex flex-col">
               <span className="font-bold">{post.user.username}</span>
