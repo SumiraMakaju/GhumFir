@@ -16,11 +16,12 @@ export default function InfiniteLoad({
                 if(inView){
                     onBottomReached();
                 }
-            }
-        })
+            },
+        });
 
-        return <div className={className}>
+        return (<div className={className}>
             {children}
-            <div ref={ref} className={className}></div>
+            <div ref={ref} ></div>
         </div>
+        );
 }
