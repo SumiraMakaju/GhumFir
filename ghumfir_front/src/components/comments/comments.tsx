@@ -13,6 +13,14 @@ interface CommentsProps {
 
 export default function Comments({ post }: CommentsProps) {
   const queryClient = useQueryClient();
+  if(post._count.comments==0){
+    return (
+      <div className="space-y-3">
+        <CommentInput post={post} />
+        <p className="text-center text-muted-foreground">No comments yet.</p>
+      </div>
+    );
+  }
 
   const { data, fetchNextPage, hasNextPage, isFetching, status } =
     useInfiniteQuery({
@@ -59,7 +67,7 @@ export default function Comments({ post }: CommentsProps) {
       )}
       <div className="divide-y">
         {comments.map((comment) => (
-          <Comment key={comment.id} comment={comment} />
+          post.id == comment.postId?(<Comment key={comment.id} comment={comment} />):null
         ))}
       </div>
     </div>

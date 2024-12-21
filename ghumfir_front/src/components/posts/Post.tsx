@@ -53,10 +53,8 @@ initialState={{
   likes: post._count.likes, 
 isLikedByUser: post.likes.some((like) => like.userId === user.id)
 }} />
-
 <CommentButton post={post} onclick={()=> setShowComments(!showComments)} />
 </div>
-
 {showComments && <Comments post={post} />}
     </article>
   );
