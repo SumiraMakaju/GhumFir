@@ -1,10 +1,10 @@
 import { validateRequest } from "@/auth";
 import { redirect } from "next/navigation";
-import SessionProvider from "../SessionProvider";
+import SessionProvider from "./SessionProvider";
 
 
-import MenuBar from "./MenuBar";
-import Navbar from "./Navbar";
+import MenuBar from "./home/MenuBar";
+import Navbar from "./home/Navbar";
 
 export default async function layout({
     children,

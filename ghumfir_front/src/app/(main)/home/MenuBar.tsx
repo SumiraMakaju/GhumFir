@@ -1,12 +1,27 @@
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { Bell, Home, Hotel, MessageCircleHeartIcon } from "lucide-react";
+import {  BookAIcon, Home, Hotel, MessageCircleHeartIcon } from "lucide-react";
+import prisma from "@/lib/prisma";
+import { validateRequest } from "@/auth";
+import NotificationsButton from "../notbut";
 
 interface MenuBarProps {
   className?: string;
 }
 
 export default async function MenuBar({ className }: MenuBarProps) {
+
+const {user} = await validateRequest();
+
+if (!user) return null;
+
+const not_count = await prisma.notification.count({
+  where: {
+    recipientId: user.id,
+    read: false,
+  },
+});
+
   return (
     <div className={className}>
       <Button
@@ -21,17 +36,8 @@ export default async function MenuBar({ className }: MenuBarProps) {
         </Link>
       </Button>
 
-      <Button
-        variant="ghost"
-        className="flex items-center justify-start gap-3"
-        title="Notifications"
-        asChild
-      >
-        <Link href="/Notifications">
-          <Bell />
-          <span className="hidden lg:inline">Notifications</span>
-        </Link>
-      </Button>
+      <NotificationsButton initialState={{ unreadCount: not_count }} />
+      
 
       <Button
         variant="ghost"
@@ -53,6 +59,18 @@ export default async function MenuBar({ className }: MenuBarProps) {
       >
         <Link href="/hotels">
           <Hotel />
+          <span className="hidden lg:inline">Hotels</span>
+        </Link>
+      </Button>
+
+      <Button
+        variant="ghost"
+        className="flex items-center justify-start gap-3"
+        title="Diaries"
+        asChild
+      >
+        <Link href="/Diaries">
+          <BookAIcon/>
           <span className="hidden lg:inline">Hotels</span>
         </Link>
       </Button>
