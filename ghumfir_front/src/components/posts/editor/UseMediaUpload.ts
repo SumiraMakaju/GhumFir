@@ -43,9 +43,11 @@ export default function useMediaUpload() {
 
           if (!uploadResult) return a;
 
+          console.log("Upload result:", uploadResult);
+
           return {
             ...a,
-            mediaId: uploadResult.serverData.mediaId,
+            mediaId: uploadResult.key,
             isUploading: false,
           };
         }),

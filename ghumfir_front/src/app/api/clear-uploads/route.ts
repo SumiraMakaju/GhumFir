@@ -29,7 +29,7 @@ export async function GET(req: Request) {
       },
     });
 
-    new UTApi().deleteFiles(
+    new UTApi({token: process.env.UPLOADTHING_SECRET}).deleteFiles(
       unusedMedia.map(
         (m) =>
           m.url.split(`/a/${process.env.NEXT_PUBLIC_UPLOADTHING_APP_ID}/`)[1],

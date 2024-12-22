@@ -11,6 +11,7 @@ import {
 
 export async function updateUserProfile(values: UpdateUserProfileValues) {
   const validatedValues = updateUserProfileSchema.parse(values);
+  console.log("validatedValues: ",validatedValues);
 
   const { user } = await validateRequest();
 

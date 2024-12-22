@@ -8,6 +8,7 @@ const nextConfig: NextConfig = {
     },
     serverExternalPackages: ["@node-rs/argon2"], 
     images:{
+      domains: ['utfs.io'], // Add the domain here
       remotePatterns:[
         {
         protocol: "https",
