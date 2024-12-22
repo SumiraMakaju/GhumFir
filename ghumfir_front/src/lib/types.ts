@@ -50,6 +50,7 @@ export function getPostDatainclude(loggedInUserId: string) {
         comments: true,
       },
     },
+    attachments: true,
   } satisfies Prisma.PostInclude;
 }
 

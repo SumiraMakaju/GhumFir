@@ -2,15 +2,14 @@ import { validateRequest } from "@/auth";
 import FollowButton from "@/components/FollowButton";
 import FollowerCount from "@/components/FollowerCount";
 import Popular from "@/components/popular";
-import { Button } from "@/components/ui/button";
 import UserAvatar from "@/components/UserAvatar";
 import prisma from "@/lib/prisma";
 import { FollowerInfo, getUserDataSelect, UserData } from "@/lib/types";
 import { formatNumber } from "@/lib/utils";
-//import { formatDate } from "date-fns";
 import { notFound } from "next/navigation";
 import { cache } from "react";
 import UserPosts from "./UserPosts";
+import EditProfile from "./EditProfile";
 
 interface PageProps {
   params: { username: string };
@@ -33,9 +32,8 @@ const getUser = cache(async (username: string, loggedInUser: string) => {
 });
 
 // Generate dynamic metadata
-export async function generateMetadata(context: PageProps) {
-  const { params } = context;
-  const { username } = params; // Awaiting removed because params are synchronous
+export async function generateMetadata({ params }: PageProps) {
+  const { username } = params;
 
   const { user: loggedInUser } = await validateRequest();
 
@@ -49,8 +47,7 @@ export async function generateMetadata(context: PageProps) {
 }
 
 // Main Page component
-export default async function Page(context: PageProps) {
-  const { params } = context;
+export default async function Page({ params }: PageProps) {
   const { username } = params;
 
   const { user: loggedInUser } = await validateRequest();
@@ -70,8 +67,7 @@ export default async function Page(context: PageProps) {
       <div className="w-full min-w-0 space-y-5">
         <UserProfile user={user} loggedInUserId={loggedInUser.id} />
         <div className="rounded-2xl bg-card p-5 shadow-sm">
-          <h2 className="text-center text-2xl font-bold">{user.displayName}&apos; Travel story
-          </h2>
+          <h2 className="text-center text-2xl font-bold">{user.displayName}&apos; Travel story</h2>
         </div>
         <UserPosts userId={user.id} />
       </div>
@@ -107,28 +103,26 @@ async function UserProfile({ user, loggedInUserId }: UserProfileProps) {
             <h1 className="text-3xl font-bold">{user.displayName}</h1>
             <div className="text-muted-foreground">@{user.username}</div>
           </div>
-          {/*<div>Member since {formatDate(user.createdAt,"MMM d, yyyy")}</div>*/}
           <div className="flex items-center gap-3">
             <span>
-            Posts:{" "}
-            <span className="font-semibold">
-              {formatNumber(user._count.posts)}
+              Posts:{" "}
+              <span className="font-semibold">
+                {formatNumber(user._count.posts)}
+              </span>
             </span>
-          </span>
-          <FollowerCount userId={user.id} initialState={followerInfo} />
+            <FollowerCount userId={user.id} initialState={followerInfo} />
           </div>
         </div>
 
         {user.id === loggedInUserId ? (
-          <Button>Edit profile</Button>):(
-            <FollowButton userId={user.id} initialState={followerInfo} />
-          )
-        }
-
+          <EditProfile user={user} />
+        ) : (
+          <FollowButton userId={user.id} initialState={followerInfo} />
+        )}
       </div>
-      {user.bio &&(
+      {user.bio && (
         <>
-          <hr/>
+          <hr />
           <div className="overflow-hidden whitespace-pre-line break-words">
             {user.bio}
           </div>

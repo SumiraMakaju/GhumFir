@@ -1,78 +1,155 @@
-import { PostData as Data, PostData } from "@/lib/types";
-import UserAvatar from "../UserAvatar";
-import Link from "next/link";
-import { formatRelativeDate } from "@/lib/utils";
+"use client";
+
 import { useSession } from "@/app/(main)/SessionProvider";
-import PostMore from "./postmore";
-import Linkify from "../Linkify";
-import UserTooltip from "../UserToolTip";
-import LikeButton from "./LikeButton";
+import { PostData } from "@/lib/types";
+import { cn, formatRelativeDate } from "@/lib/utils";
+import { Media } from "@prisma/client";
+import { MessageSquare } from "lucide-react";
+import Image from "next/image";
+import Link from "next/link";
 import { useState } from "react";
-import { MessageCircleCode } from "lucide-react";
 import Comments from "../comments/comments";
-//import { Button } from "../ui/button";
+import Linkify from "../Linkify";
+import UserAvatar from "../UserAvatar";
+import UserTooltip from "../UserToolTip";
+
+import LikeButton from "./LikeButton";
+import PostMoreButton from "./postmore";
 
 interface PostProps {
-  post: Data;
+  post: PostData;
 }
 
 export default function Post({ post }: PostProps) {
   const { user } = useSession();
 
-    const [showComments, setShowComments] = useState(false);
+  const [showComments, setShowComments] = useState(false);
+
   return (
-    <article className="group/post space-y-3 rounded-3xl bg-card p-5 shadow-md">
+    <article className="group/post space-y-3 rounded-2xl bg-card p-5 shadow-sm">
       <div className="flex justify-between gap-3">
         <div className="flex flex-wrap gap-3">
-         <UserTooltip user={post.user}>
-          <Link href={`/home/users/${post.user.username}`} className="flex items-center gap-3 hover:underline">
-            <UserAvatar avatarUrl={post.user.avatarUrl} />
-            <div className="flex flex-col">
-              <span className="font-bold">{post.user.username}</span>
-              <span className="text-muted-foreground text-sm underline hover:underline-offset-2">
-                {formatRelativeDate(new Date(post.createdAt))}
-              </span>
-            </div>
-          </Link>
+          <UserTooltip user={post.user}>
+            <Link href={`/users/${post.user.username}`}>
+              <UserAvatar avatarUrl={post.user.avatarUrl} />
+            </Link>
           </UserTooltip>
+          <div>
+            <UserTooltip user={post.user}>
+              <Link
+                href={`/users/${post.user.username}`}
+                className="block font-medium hover:underline"
+              >
+                {post.user.displayName}
+              </Link>
+            </UserTooltip>
+            <Link
+              href={`/posts/${post.id}`}
+              className="block text-sm text-muted-foreground hover:underline"
+              suppressHydrationWarning
+            >
+              {formatRelativeDate(post.createdAt)}
+            </Link>
+          </div>
         </div>
         {post.user.id === user.id && (
-          <PostMore post={post} className="opacity-0 transition-opacity group-hover/post:opacity-100" />
+          <PostMoreButton
+            post={post}
+            className="opacity-0 transition-opacity group-hover/post:opacity-100"
+          />
         )}
       </div>
       <Linkify>
-      
-      <div className="whitespace-pre-line break-words">{post.content}</div>
-
+        <div className="whitespace-pre-line break-words">{post.content}</div>
       </Linkify>
-<hr className="text-muted-foreground"/>
-<div className="flex items-center gap-6">
-<LikeButton 
-postId={post.id} 
-initialState={{
-  likes: post._count.likes, 
-isLikedByUser: post.likes.some((like) => like.userId === user.id)
-}} />
-<CommentButton post={post} onclick={()=> setShowComments(!showComments)} />
-</div>
-{showComments && <Comments post={post} />}
+      {!!post.attachments.length && (
+        <MediaPreviews attachments={post.attachments} />
+      )}
+      <hr className="text-muted-foreground" />
+      <div className="flex justify-between gap-5">
+        <div className="flex items-center gap-5">
+          <LikeButton
+            postId={post.id}
+            initialState={{
+              likes: post._count.likes,
+              isLikedByUser: post.likes.some((like) => like.userId === user.id),
+            }}
+          />
+          <CommentButton
+            post={post}
+            onClick={() => setShowComments(!showComments)}
+          />
+        </div>
+      </div>
+      {showComments && <Comments post={post} />}
     </article>
   );
 }
 
-interface CommentButtonProps{
-  post: PostData;
-  onclick:()=> void;
+interface MediaPreviewsProps {
+  attachments: Media[];
 }
 
-function CommentButton({post, onclick}:CommentButtonProps){
+function MediaPreviews({ attachments }: MediaPreviewsProps) {
   return (
-    <button onClick={onclick} className="flex items-center gap-2">
- <MessageCircleCode className="size-5"/>
- <span className="text-sm font-medium tabular-nums">
-  {post._count.comments}{" "}
-  <span className="hidden sm:inline">comments</span>
-  </span>
-  </button>
+    <div
+      className={cn(
+        "flex flex-col gap-3",
+        attachments.length > 1 && "sm:grid sm:grid-cols-2",
+      )}
+    >
+      {attachments.map((m) => (
+        <MediaPreview key={m.id} media={m} />
+      ))}
+    </div>
+  );
+}
+
+interface MediaPreviewProps {
+  media: Media;
+}
+
+function MediaPreview({ media }: MediaPreviewProps) {
+  if (media.type === "IMAGE") {
+    return (
+      <Image
+        src={media.url}
+        alt="Attachment"
+        width={500}
+        height={500}
+        className="mx-auto size-fit max-h-[30rem] rounded-2xl"
+      />
+    );
+  }
+
+  if (media.type === "VIDEO") {
+    return (
+      <div>
+        <video
+          src={media.url}
+          controls
+          className="mx-auto size-fit max-h-[30rem] rounded-2xl"
+        />
+      </div>
+    );
+  }
+
+  return <p className="text-destructive">Unsupported media type</p>;
+}
+
+interface CommentButtonProps {
+  post: PostData;
+  onClick: () => void;
+}
+
+function CommentButton({ post, onClick }: CommentButtonProps) {
+  return (
+    <button onClick={onClick} className="flex items-center gap-2">
+      <MessageSquare className="size-5" />
+      <span className="text-sm font-medium tabular-nums">
+        {post._count.comments}{" "}
+        <span className="hidden sm:inline">comments</span>
+      </span>
+    </button>
   );
 }
