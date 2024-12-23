@@ -29,13 +29,9 @@ export default function Comments({ post }: CommentsProps) {
         return response;
         },
       // Ensure this aligns with API response
+      getNextPageParam: (lastPage) => lastPage.previousCursor,
       initialPageParam: null as string | null,
       enabled: !!post.id, // Only fetch when post.id is valid
-      getNextPageParam: (firstPage) => firstPage.previousCursor,
-      select: (data) => ({
-        pages: [...data.pages].reverse(), //no idea documentation batw ho
-        pageParams: [...data.pageParams].reverse(),
-      }),
     });
     
   // Reset query state when post.id chang
