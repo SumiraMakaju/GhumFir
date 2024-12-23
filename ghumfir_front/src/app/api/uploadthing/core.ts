@@ -11,7 +11,7 @@ export const fileRouter = {
   avatar: f({
     image: { maxFileSize: "512KB" },
   })
-    .middleware(async () => {
+    .middleware(async ({req}) => {
       const { user } = await validateRequest();
       if (!user) throw new UploadThingError("Unauthorized");
       return { user };

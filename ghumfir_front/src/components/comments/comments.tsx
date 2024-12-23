@@ -5,36 +5,43 @@ import { Loader2 } from "lucide-react";
 import { Button } from "../ui/button";
 import Comment from "./Comment";
 import CommentInput from "./CommentInput";
-//import { useEffect } from "react";
+import { useEffect } from "react";
 
 interface CommentsProps {
   post: PostData;
 }
 
 export default function Comments({ post }: CommentsProps) {
- // const queryClient = useQueryClient();
+ const queryClient = useQueryClient();
  
 
   const { data, fetchNextPage, hasNextPage, isFetching, status } =
     useInfiniteQuery({
       queryKey: ["comments", post.id], // Unique queryKey for each post
-      queryFn: ({ pageParam }) =>
-        kyInstance
+      queryFn: async ({ pageParam }) =>{
+        const response = await kyInstance
           .get(
             `/api/posts/${post.id}/comments`,
-            pageParam ? { searchParams: { cursor: pageParam } } : {}
+            pageParam?{ searchParams: { cursor: pageParam} }:{}
           )
-          .json<CommentsPage>(),
+          .json<CommentsPage>();
+          response.comments = response.comments.filter((comment) => post.id === comment.postId);
+        return response;
+        },
       // Ensure this aligns with API response
       initialPageParam: null as string | null,
+      enabled: !!post.id, // Only fetch when post.id is valid
       getNextPageParam: (firstPage) => firstPage.previousCursor,
       select: (data) => ({
         pages: [...data.pages].reverse(), //no idea documentation batw ho
         pageParams: [...data.pageParams].reverse(),
       }),
     });
-
-  // Reset query state when post.id changes
+    
+  // Reset query state when post.id chang
+  useEffect(() => {
+    queryClient.invalidateQueries({ queryKey: ["comments", post.id] });
+  }, [post.id, queryClient]);
 
   const comments = data?.pages.flatMap((page) => page.comments) || [];
 
@@ -46,7 +53,7 @@ export default function Comments({ post }: CommentsProps) {
           variant="link"
           className="mx-auto block"
           disabled={isFetching}
-          onClick={() => fetchNextPage()}
+          onClick={() => {fetchNextPage()}}
         >
           Load previous comments
         </Button>
@@ -69,7 +76,7 @@ export default function Comments({ post }: CommentsProps) {
       )}
       <div className="divide-y">
         {comments.map((comment) => (
-          post.id == comment.postId?(<Comment key={comment.id} comment={comment} />):null
+          <Comment key={comment.id} comment={comment} />
         ))}
       </div>
     </div>

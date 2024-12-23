@@ -99,6 +99,7 @@ model Comment {
 
   createdAt DateTime @default(now())
 
+  @@index([postId])
   @@map("comments")
 }
 

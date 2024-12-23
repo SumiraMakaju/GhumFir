@@ -30,7 +30,6 @@ export function useUpdateProfileMutation() {
       let uploadResult;
       if (avatar) {
         uploadResult = await startAvatarUpload([avatar]);
-        console.log("Upload result:", uploadResult);
       }else{
         console.log("No avatar provided");
       }
@@ -54,7 +53,15 @@ export function useUpdateProfileMutation() {
     onSuccess: async ({uploadResult, updatedUser}) => {
       // Use the avatarUrl from the uploadthing response if available
       const newAvatarUrl = uploadResult?.[0]?.url;
-      
+      if (newAvatarUrl) {
+        // Update the user's avatar URL in Prisma
+        await prisma.user.update({
+          where: { id: updatedUser.id }, // Assuming user has an 'id' field
+          data: {
+            avatarUrl: newAvatarUrl,
+          },
+        });
+      }      
       const queryFilter: QueryFilters<InfiniteData<PostsPage, string | null>, Error, InfiniteData<PostsPage, string | null>, QueryKey> = {
         queryKey: ["post-feed"],
       };
