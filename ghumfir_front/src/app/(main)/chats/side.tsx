@@ -1,5 +1,6 @@
-import { ChannelList } from "stream-chat-react";
+import { ChannelList, ChannelPreview} from "stream-chat-react";
 import { useSession } from "../SessionProvider";
+import { channel } from "diagnostics_channel";
 
 export default function Side(){
     const {user} = useSession();
@@ -22,7 +23,7 @@ export default function Side(){
                 },
               },
             }}
-           // Preview={ChannelPreviewCustom}
+          //  Preview={ChannelPreview}
         />
     </div>
 }

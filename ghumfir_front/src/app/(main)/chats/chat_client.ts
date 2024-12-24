@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useSession } from "../SessionProvider";
 import { StreamChat } from "stream-chat";
+import {useCreateChatClient} from "stream-chat-react"
 import kyInstance from "@/lib/ky";
 //import { error } from "console";
 
@@ -22,14 +23,13 @@ export default function ChatClient() {
         .then((data)=> data.token)
     )
     .catch(error=> console.error("faileddddd" , error))
-    .then(() => setChatCLient(client))
+    .then(() => setChatCLient(client));
 
 return () => {
     setChatCLient(null);
-    client.disconnectUser()
+    client?.disconnectUser()
     .catch(error => console.error("failed to disconnect", error))
 }
-
     },[user.id, user.username, user.displayName, user.avatarUrl])
 
 

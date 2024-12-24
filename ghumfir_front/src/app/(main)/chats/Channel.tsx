@@ -9,16 +9,22 @@ import {
   MessageList,
   Window,
 } from "stream-chat-react";
+import { EmojiPicker } from 'stream-chat-react/emojis';
+
+import { init, SearchIndex } from "emoji-mart";
+import data from "@emoji-mart/data";
 
 interface ChatChannelProps {
   open: boolean;
   openSidebar: () => void;
 }
 
+init({ data });
+
 export default function ChatChannel({ open, openSidebar }: ChatChannelProps) {
   return (
     <div className={cn("w-full md:block", !open && "hidden")}>
-      <Channel>
+      <Channel EmojiPicker={EmojiPicker} emojiSearchIndex={SearchIndex}>
         <Window>
           <CustomChannelHeader openSidebar={openSidebar} />
           <MessageList />

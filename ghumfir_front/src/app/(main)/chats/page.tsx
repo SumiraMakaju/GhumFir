@@ -1,11 +1,13 @@
 import { Metadata } from "next";
-import Chat from "./chat";
+import Chat from "./chat"; // Import the Chat component
 
+// Define metadata for the page
 export const metadata: Metadata = {
     title: "Chat",
     description: "ghumfir initial chat setup",
 };
 
-export default function ChatPage() {
+// Define the ChatPage component and pass mutualFollowers as props
+export default async function ChatPage() {
     return <Chat />;
 }
