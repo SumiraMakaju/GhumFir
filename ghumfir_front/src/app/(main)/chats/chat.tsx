@@ -47,7 +47,14 @@ export default function Chat() {
     return (
         <main className="relative w-full overflow-hidden rounded-2xl bg-card shadow-sm">
             <div className="absolute bottom-0 top-0 flex w-full">
+            
                 <ChatUI client={chatClient}>
+                <button 
+                        className="fixed bottom-4 left bg-blue-500 text-white px-4 py-2 rounded-lg shadow-md hover:bg-blue-600" 
+                        onClick={() => setShowModal(true)}
+                    >
+                        Create Chat
+                    </button>
                     <div className={`flex h-full ${sidebarOpen ? 'md:w-72' : 'w-0'} transition-all duration-300`}>
                         <Side />
                     </div>
@@ -57,20 +64,20 @@ export default function Chat() {
                             openSidebar={toggleSidebar}
                         />
                     </div>
-                    <button 
-                        className="fixed bottom-4 right-4 bg-blue-500 text-white px-4 py-2 rounded-lg shadow-md hover:bg-blue-600" 
-                        onClick={() => setShowModal(true)}
-                    >
-                        Create Chat
-                    </button>
                     <UserListPopup 
                         isOpen={showModal} 
                         onClose={() => setShowModal(false)} 
+                        client={chatClient}
                         title="Select User" 
+                        currentUserId={session.userId}
                         users={mutualFollowers || []}
                     />
                 </ChatUI>
             </div>
         </main>
     );
+}
+
+export async function createChat(){
+
 }

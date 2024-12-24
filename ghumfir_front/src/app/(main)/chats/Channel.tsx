@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { Menu } from "lucide-react";
+import { useEffect, useRef } from "react";
 import {
   Channel,
   ChannelHeader,
@@ -22,13 +23,35 @@ interface ChatChannelProps {
 init({ data });
 
 export default function ChatChannel({ open, openSidebar }: ChatChannelProps) {
+  const messageListRef = useRef<HTMLDivElement>(null);
+
+  // Function to scroll to the bottom
+  const scrollToBottom = () => {
+    if (messageListRef.current) {
+      messageListRef.current.scrollTo({
+        top: messageListRef.current.scrollHeight,
+        behavior: "smooth",
+      });
+    }
+  };
+
+  useEffect(() => {
+    scrollToBottom(); // Ensure scroll to bottom on mount
+  }, []);
+
   return (
-    <div className={cn("w-full md:block", !open && "hidden")}>
+    <div className={cn("w-full md:block innerheight-600px", !open && "hidden") }>
       <Channel EmojiPicker={EmojiPicker} emojiSearchIndex={SearchIndex}>
         <Window>
           <CustomChannelHeader openSidebar={openSidebar} />
+          {/* Scrollable Message List */}
+        <div
+          className="flex-grow overflow-y-auto" // Flex-grow makes it occupy remaining space
+          style={{ maxHeight: "600px" }} // Adjust height dynamically (yet to make {sumira will})
+        >
           <MessageList />
-          <MessageInput />
+        </div>
+          <MessageInput/>
         </Window>
       </Channel>
     </div>

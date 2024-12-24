@@ -25,6 +25,8 @@ export default function ChatClient() {
     .catch(error=> console.error("faileddddd" , error))
     .then(() => setChatCLient(client));
 
+    
+
 return () => {
     setChatCLient(null);
     client?.disconnectUser()
