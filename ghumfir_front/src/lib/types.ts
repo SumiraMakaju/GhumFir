@@ -121,3 +121,12 @@ export interface NotificationCountInfo {
 export interface MessageCountInfo {
   unreadCount: number;
 }
+
+
+export interface MutualFollowersResponse {
+  users: UserData[];
+  metadata: {
+    total: number;
+    isMutualWithLoggedInUser: boolean;
+  };
+}

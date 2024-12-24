@@ -45,7 +45,7 @@ const not_count = await prisma.notification.count({
         title="Messages"
         asChild
       >
-        <Link href="/Messages">
+        <Link href="/chats">
           <MessageCircleHeartIcon />
           <span className="hidden lg:inline">Messages</span>
         </Link>
