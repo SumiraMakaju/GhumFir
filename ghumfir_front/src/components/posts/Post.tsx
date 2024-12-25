@@ -89,8 +89,12 @@ export default function Post({ post }: PostProps) {
 }
 
 interface MediaPreviewsProps {
-  attachments: Media[];
-}
+  attachments: {
+    id: string;
+    type: "IMAGE" | "VIDEO";
+    url: string;
+    createdAt: Date;
+  }[];}
 
 function MediaPreviews({ attachments }: MediaPreviewsProps) {
   return (
@@ -108,7 +112,12 @@ function MediaPreviews({ attachments }: MediaPreviewsProps) {
 }
 
 interface MediaPreviewProps {
-  media: Media;
+  media: {
+    id: string;
+    type: "IMAGE" | "VIDEO";
+    url: string;
+    createdAt: Date;
+  };
 }
 
 function MediaPreview({ media }: MediaPreviewProps) {

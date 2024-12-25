@@ -1,6 +1,8 @@
 import { useToast } from "@/hooks/use-toast";
 import { useUploadThing } from "@/lib/uploadthing";
 import { useState } from "react";
+import prisma from "@/lib/prisma";
+import { MediaType } from "@/lib/types";
 
 export interface Attachment {
   file: File;
@@ -44,6 +46,31 @@ export default function useMediaUpload() {
           if (!uploadResult) return a;
 
           console.log("Upload result:", uploadResult);
+          const media_type = uploadResult.type.split('/')[0];
+
+      const uploadData = [
+        {
+          key: uploadResult.key,
+          type: uploadResult.type,
+          url: uploadResult.url,
+        },
+      ];
+
+      fetch('/api/media', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ uploads: uploadData }),
+      })
+        .then((response) => {
+          if (!response.ok) throw new Error('Failed to upload media');
+          return response.json();
+        })
+        .then((data) => {
+          console.log('Media uploaded successfully:', data);
+        })
+        .catch((error) => {
+          console.error('Error uploading media:', error);
+        });
 
           return {
             ...a,
