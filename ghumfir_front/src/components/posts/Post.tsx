@@ -14,6 +14,8 @@ import UserAvatar from "../UserAvatar";
 import UserTooltip from "../UserToolTip";
 
 import LikeButton from "./LikeButton";
+import { MessageCircleCode } from "lucide-react";
+//import { Button } from "../ui/button";
 import PostMoreButton from "./postmore";
 
 interface PostProps {

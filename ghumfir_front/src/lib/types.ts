@@ -20,11 +20,12 @@ export function getUserDataSelect(loggedInUserId: string) {
       select: {
         posts: true,
         followers: true,
-
       },
     },
   } satisfies Prisma.UserSelect;
 }
+
+
 
 export type UserData = Prisma.UserGetPayload<{
   select: ReturnType<typeof getUserDataSelect>;
@@ -43,14 +44,13 @@ export function getPostDatainclude(loggedInUserId: string) {
         userId: true,
       },
     },
-    
     _count: {
       select: {
         likes: true,
         comments: true,
       },
     },
-    attachments: true,
+    attachments:true,
   } satisfies Prisma.PostInclude;
 }
 
@@ -67,7 +67,7 @@ export function getCommentDataInclude(loggedInUserId: string) {
   return {
     user: {
       select: getUserDataSelect(loggedInUserId),
-    },
+    },    
   } satisfies Prisma.CommentInclude;
 }
 

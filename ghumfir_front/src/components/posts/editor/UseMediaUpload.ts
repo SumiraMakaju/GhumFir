@@ -30,7 +30,7 @@ export default function useMediaUpload() {
 
       setAttachments((prev) => [
         ...prev,
-        ...renamedFiles.map((file) => ({ file, isUploading: true })),
+        ...renamedFiles.flatMap((file) => ({ file, isUploading: true })),
       ]);
 
       return renamedFiles;
