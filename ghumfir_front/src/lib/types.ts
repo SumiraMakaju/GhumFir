@@ -25,6 +25,8 @@ export function getUserDataSelect(loggedInUserId: string) {
   } satisfies Prisma.UserSelect;
 }
 
+
+
 export type UserData = Prisma.UserGetPayload<{
   select: ReturnType<typeof getUserDataSelect>;
 }>;
@@ -48,7 +50,7 @@ export function getPostDatainclude(loggedInUserId: string) {
         comments: true,
       },
     },
-    attachments: true,
+    attachments:true,
   } satisfies Prisma.PostInclude;
 }
 

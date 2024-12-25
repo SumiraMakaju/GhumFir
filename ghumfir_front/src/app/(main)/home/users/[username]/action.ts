@@ -9,7 +9,7 @@ import {
   UpdateUserProfileValues,
 } from "@/lib/validation";
 
-export async function updateUserProfile(values: UpdateUserProfileValues) {
+export async function updateUserProfile(values: UpdateUserProfileValues, avatarUrl?: string) {
   const validatedValues = updateUserProfileSchema.parse(values);
   console.log("validatedValues: ",validatedValues);
 
@@ -20,7 +20,11 @@ export async function updateUserProfile(values: UpdateUserProfileValues) {
   const updatedUser = await prisma.$transaction(async (tx) => {
     const updatedUser = await tx.user.update({
       where: { id: user.id },
-      data: validatedValues,
+      data: {
+        bio: validatedValues.bio,
+        displayName: validatedValues.displayName,
+        avatarUrl: avatarUrl,
+      },
       select: getUserDataSelect(user.id),
     });
     await streamServerClient.partialUpdateUser({

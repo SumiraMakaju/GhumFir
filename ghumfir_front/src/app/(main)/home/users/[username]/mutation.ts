@@ -27,41 +27,30 @@ export function useUpdateProfileMutation() {
       avatar?: File;
     }) => {
       // Start uploading the avatar if it's provided
-      let uploadResult;
-      if (avatar) {
-        uploadResult = await startAvatarUpload([avatar]);
-      }else{
-        console.log("No avatar provided");
-      }
-      // Update user profile with values only - avatar is handled by uploadthing
-      const updatedUser = await updateUserProfile(values);
-
-      if (uploadResult && uploadResult[0]?.url) {
-        const newAvatarUrl = uploadResult[0].url;
-        
-        // Update the user's avatar URL in Prisma
-        await prisma.user.update({
-          where: { id: updatedUser.id }, // Assuming user has an 'id' field
-          data: {
-            avatarUrl: newAvatarUrl,
-          },
+      let uploadResult = undefined;
+      let updatedUser = undefined;
+        uploadResult = await startAvatarUpload([avatar])
+        .then((res) => {
+          if (!res) {
+            throw new Error(res);
+          }
+          
+          updatedUser = updateUserProfile(values, res[0].url);
+        })
+        .catch((error) => {
+          console.error("Error uploading avatar", error);
+          throw new Error("Failed to upload avatar");
         });
-      }
 
       return { updatedUser, uploadResult };
     },
-    onSuccess: async ({uploadResult, updatedUser}) => {
+    onSuccess: async ({updatedUser, uploadResult}) => {
+      if (!updatedUser) {
+        throw new Error("Failed to update profile");
+      }
+
       // Use the avatarUrl from the uploadthing response if available
-      const newAvatarUrl = uploadResult?.[0]?.url;
-      if (newAvatarUrl) {
-        // Update the user's avatar URL in Prisma
-        await prisma.user.update({
-          where: { id: updatedUser.id }, // Assuming user has an 'id' field
-          data: {
-            avatarUrl: newAvatarUrl,
-          },
-        });
-      }      
+      const newAvatarUrl = updatedUser?.avatarUrl;    
       const queryFilter: QueryFilters<InfiniteData<PostsPage, string | null>, Error, InfiniteData<PostsPage, string | null>, QueryKey> = {
         queryKey: ["post-feed"],
       };
@@ -71,7 +60,10 @@ export function useUpdateProfileMutation() {
       queryClient.setQueriesData<InfiniteData<PostsPage, string | null>>(
         queryFilter,
         (oldData) => {
-          if (!oldData) return;
+          if (!oldData) {
+            console.error("Failed to update profile: missing old data");
+            return ;
+          }
 
           return {
             pageParams: oldData.pageParams,
