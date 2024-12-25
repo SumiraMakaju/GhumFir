@@ -31,6 +31,29 @@ export type UserData = Prisma.UserGetPayload<{
   select: ReturnType<typeof getUserDataSelect>;
 }>;
 
+// export function getPostDatainclude(loggedInUserId: string) {
+//   return {
+//     user: {
+//       select: getUserDataSelect(loggedInUserId),
+//     },
+//     likes: {
+//       where: {
+//         userId: loggedInUserId,
+//       },
+//       select: {
+//         userId: true,
+//       },
+//     },
+//     _count: {
+//       select: {
+//         likes: true,
+//         comments: true,
+//       },
+//     },
+//     attachments:true,
+//   } satisfies Prisma.PostInclude;
+// }
+
 export function getPostDatainclude(loggedInUserId: string) {
   return {
     user: {
@@ -50,7 +73,14 @@ export function getPostDatainclude(loggedInUserId: string) {
         comments: true,
       },
     },
-    attachments:true,
+    attachments: {
+      select: {
+        id: true,
+        type: true,
+        url: true,
+        createdAt: true
+      }
+    },
   } satisfies Prisma.PostInclude;
 }
 
@@ -120,4 +150,9 @@ export interface NotificationCountInfo {
 
 export interface MessageCountInfo {
   unreadCount: number;
+}
+
+export enum MediaType {
+  IMAGE = "IMAGE",
+  VIDEO = "VIDEO",
 }
