@@ -11,33 +11,23 @@ export const fileRouter = {
   avatar: f({
     image: { maxFileSize: "512KB" },
   })
-    .middleware(async () => {
+    .middleware(async ({req}) => {
       const { user } = await validateRequest();
       if (!user) throw new UploadThingError("Unauthorized");
       return { user };
     })
     .onUploadComplete(async ({ metadata, file }) => {
       try {
-        // Transform the URL first
-        const newAvatarUrl = file.url.replace(
-          "/f/",
-          `/a/${process.env.NEXT_PUBLIC_UPLOADTHING_APP_ID}/`,
-        );
-
-        console.log("New Avatar URL:", newAvatarUrl);
+        const oldAvatar = await prisma.user.findUnique({
+          where: { id: metadata.user.id },
+          select: { avatarUrl: true },
+        });
 
         // Delete old avatar if it exists
-        if (metadata.user.avatarUrl) {
+        if (oldAvatar?.avatarUrl) {
           try {
-            const key = metadata.user.avatarUrl.split(
-              `/a/${process.env.NEXT_PUBLIC_UPLOADTHING_APP_ID}/`,
-            )[1];
-            
-            if (key) {
               const api = new UTApi({ token: process.env.UPLOADTHING_SECRET });
-              await api.deleteFiles(key);
-              console.log("Old avatar deleted successfully");
-            }
+              await api.deleteFiles('avatar_'+metadata.user.id+'.webp');
           } catch (deleteError) {
             // Log but don't fail if delete fails
             console.error("Error deleting old avatar:", deleteError);
@@ -52,7 +42,7 @@ export const fileRouter = {
 
         console.log("Avatar URL updated in database:", updatedUser.avatarUrl);
 
-        return { avatarUrl: newAvatarUrl };
+        return { avatarUrl: updatedUser.avatarUrl };
 
       } catch (error) {
         console.error("Error processing avatar upload:", error);

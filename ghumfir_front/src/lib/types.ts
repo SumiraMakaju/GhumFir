@@ -20,15 +20,39 @@ export function getUserDataSelect(loggedInUserId: string) {
       select: {
         posts: true,
         followers: true,
-
       },
     },
   } satisfies Prisma.UserSelect;
 }
 
+
+
 export type UserData = Prisma.UserGetPayload<{
   select: ReturnType<typeof getUserDataSelect>;
 }>;
+
+// export function getPostDatainclude(loggedInUserId: string) {
+//   return {
+//     user: {
+//       select: getUserDataSelect(loggedInUserId),
+//     },
+//     likes: {
+//       where: {
+//         userId: loggedInUserId,
+//       },
+//       select: {
+//         userId: true,
+//       },
+//     },
+//     _count: {
+//       select: {
+//         likes: true,
+//         comments: true,
+//       },
+//     },
+//     attachments:true,
+//   } satisfies Prisma.PostInclude;
+// }
 
 export function getPostDatainclude(loggedInUserId: string) {
   return {
@@ -43,14 +67,20 @@ export function getPostDatainclude(loggedInUserId: string) {
         userId: true,
       },
     },
-    
     _count: {
       select: {
         likes: true,
         comments: true,
       },
     },
-    attachments: true,
+    attachments: {
+      select: {
+        id: true,
+        type: true,
+        url: true,
+        createdAt: true
+      }
+    },
   } satisfies Prisma.PostInclude;
 }
 
@@ -67,7 +97,7 @@ export function getCommentDataInclude(loggedInUserId: string) {
   return {
     user: {
       select: getUserDataSelect(loggedInUserId),
-    },
+    },    
   } satisfies Prisma.CommentInclude;
 }
 
@@ -129,4 +159,8 @@ export interface MutualFollowersResponse {
     total: number;
     isMutualWithLoggedInUser: boolean;
   };
+}
+export enum MediaType {
+  IMAGE = "IMAGE",
+  VIDEO = "VIDEO",
 }

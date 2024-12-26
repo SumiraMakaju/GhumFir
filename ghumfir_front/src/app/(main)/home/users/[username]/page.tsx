@@ -90,6 +90,7 @@ async function UserProfile({ user, loggedInUserId }: UserProfileProps) {
     ),
   };
 
+
   return (
     <div className="h-fit w-full space-y-5 rounded-3xl bg-card p-5 shadow-sm">
       <UserAvatar
