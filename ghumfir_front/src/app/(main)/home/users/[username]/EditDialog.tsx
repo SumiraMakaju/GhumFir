@@ -172,7 +172,7 @@ function AvatarInput({ src, onImageCropped }: AvatarInputProps) {
         type="button"
         onClick={() => fileInputRef.current?.click()}
         className="group relative block"
-      >
+      >j
         <Image
           src={src}
           alt="Avatar preview"
