@@ -3,7 +3,7 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   experimental: {
       staleTimes:{
-        dynamic:30,
+        dynamic:5,
       },
     },
     serverExternalPackages: ["@node-rs/argon2"], 

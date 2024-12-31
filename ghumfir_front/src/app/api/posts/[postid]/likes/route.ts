@@ -57,14 +57,14 @@ export async function POST(
       return Response.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const postid = params.postid;  // Get the postid from params
+    const postid = await(params.postid);  // Get the postid from params
     
     if (!postid) {
       return Response.json({ error: "Post ID is required" }, { status: 400 });
     }
 
     const post = await prisma.post.findUnique({
-      where: { id: params.postid },
+      where: { id: await(params.postid) },
       select: {
         userId: true
       }
