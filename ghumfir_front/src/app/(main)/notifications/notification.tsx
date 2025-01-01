@@ -1,4 +1,5 @@
 import UserAvatar from "@/components/UserAvatar";
+import { JSX } from "react";
 import { NotificationData } from "@/lib/types";
 import { cn } from "@/lib/utils";
 import { NotificationType } from "@prisma/client";
