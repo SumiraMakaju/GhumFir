@@ -8,75 +8,75 @@ body {
   font-family: Arial, Helvetica, sans-serif;
 }
 :root {
-    /* Base colors */
-    --background: 210 60% 85%;      /* Soft powder blue with lighter shade */
-    --foreground: 215 35% 30%;      /* Gentle navy */
-    
-    /* Container styles */
-    --card: 40 30% 95%;             /* Soft creamy white */
-    --card-foreground: 215 35% 0%; /* Gentle navy */
-    --popover: 40 30% 97%;          /* Soft creamy white */
-    --popover-foreground: 215 35% 25%; /* Gentle navy */
-    
-    /* Primary colors */
-    --primary: 205 55% 70%;         /* Soft pastel blue */
-    --primary-foreground: 0 0% 100%;/* Pure white */
-    
-    /* Secondary colors */
-    --secondary: 200 45% 75%;       /* Light ocean mist */
-    --secondary-foreground: 0 0% 100%; /* Pure white */
-    
-    /* Accent and muted */
-    --muted: 205 35% 85%;          /* Soft sky blue */
-    --muted-foreground: 215 35% 35%; /* Muted navy */
-    --accent: 205 45% 75%;         /* Gentle azure */
-    --accent-foreground: 0 0% 100%; /* Pure white */
-    
-    /* Utility colors */
-    --destructive: 0 65% 65%;      /* Soft coral */
-    --destructive-foreground: 0 0% 100%; /* Pure white */
-    --border: 205 35% 85%;         /* Soft sky border */
-    --input: 205 35% 85%;          /* Soft sky input */
-    --ring: 205 55% 70%;           /* Soft pastel blue ring */
-    
-    /* Chart colors */
-    --chart-1: 215 35% 25%;        /* Gentle navy */
-    --chart-2: 205 55% 70%;        /* Soft pastel blue */
-    --chart-3: 200 45% 75%;        /* Light ocean mist */
-    --chart-4: 205 35% 85%;        /* Soft sky blue */
-    --chart-5: 40 30% 97%;         /* Soft creamy white */
-    
-    --radius: 0.75rem;
-  }
+  /* Base colors */
+  --background: 210 60% 85%; /* Soft powder blue with lighter shade */
+  --foreground: 215 35% 30%; /* Gentle navy */
 
+  /* Container styles */
+  --card: 40 30% 95%; /* Soft creamy white */
+  --card-foreground: 215 35% 0%; /* Gentle navy */
+  --popover: 40 30% 97%; /* Soft creamy white */
+  --popover-foreground: 215 35% 25%; /* Gentle navy */
 
-  .dark {
-    --background: 213 32% 17%; /* Dark Navy for dark theme */
-    --foreground: 195 100% 95%; /* Light Cyan */
-    --card: 213 32% 17%; /* Dark Navy */
-    --card-foreground: 195 100% 95%; /* Light Cyan */
-    --popover: 213 32% 17%; /* Dark Navy */
-    --popover-foreground: 195 100% 95%; /* Light Cyan */
-    --primary: 195 100% 95%; /* Light Cyan */
-    --primary-foreground: 213 32% 17%; /* Dark Navy */
-    --secondary: 195 100% 89%; /* Very Light Cyan */
-    --secondary-foreground: 213 32% 17%; /* Dark Navy */
-    --muted: 195 100% 89%; /* Very Light Cyan */
-    --muted-foreground: 207 89% 43%; /* Blue */
-    --accent: 212 100% 41%; /* Bright Cyan */
-    --accent-foreground: 195 100% 95%; /* Light Cyan */
-    --destructive: 0 76% 42%; /* Red */
-    --destructive-foreground: 195 100% 95%; /* Light Cyan */
-    --border: 195 100% 89%; /* Very Light Cyan */
-    --input: 195 100% 89%; /* Very Light Cyan */
-    --ring: 212 100% 41%; /* Bright Cyan */
-    --chart-1: 195 100% 89%; /* Very Light Cyan */
-    --chart-2: 212 100% 41%; /* Bright Cyan */
-    --chart-3: 207 89% 43%; /* Blue */
-    --chart-4: 213 32% 17%; /* Dark Navy */
-    --chart-5: 195 100% 95%; /* Light Cyan */
-  }
+  /* Primary colors */
+  /* --primary: 205 55% 70%;         */
+  /* Soft pastel blue */
+  --primary: 205 60% 50%;
+  --primary-foreground: 0 0% 100%; /* Pure white */
 
+  /* Secondary colors */
+  --secondary: 200 45% 75%; /* Light ocean mist */
+  --secondary-foreground: 0 0% 100%; /* Pure white */
+
+  /* Accent and muted */
+  --muted: 205 35% 85%; /* Soft sky blue */
+  --muted-foreground: 215 35% 35%; /* Muted navy */
+  --accent: 205 45% 75%; /* Gentle azure */
+  --accent-foreground: 0 0% 100%; /* Pure white */
+
+  /* Utility colors */
+  --destructive: 0 65% 65%; /* Soft coral */
+  --destructive-foreground: 0 0% 100%; /* Pure white */
+  --border: 205 35% 85%; /* Soft sky border */
+  --input: 205 35% 85%; /* Soft sky input */
+  --ring: 205 55% 70%; /* Soft pastel blue ring */
+
+  /* Chart colors */
+  --chart-1: 215 35% 25%; /* Gentle navy */
+  --chart-2: 205 55% 70%; /* Soft pastel blue */
+  --chart-3: 200 45% 75%; /* Light ocean mist */
+  --chart-4: 205 35% 85%; /* Soft sky blue */
+  --chart-5: 40 30% 97%; /* Soft creamy white */
+
+  --radius: 0.75rem;
+}
+
+.dark {
+  --background: 213 32% 17%; /* Dark Navy for dark theme */
+  --foreground: 195 100% 95%; /* Light Cyan */
+  --card: 213 32% 17%; /* Dark Navy */
+  --card-foreground: 195 100% 95%; /* Light Cyan */
+  --popover: 213 32% 17%; /* Dark Navy */
+  --popover-foreground: 195 100% 95%; /* Light Cyan */
+  --primary: 195 100% 95%; /* Light Cyan */
+  --primary-foreground: 213 32% 17%; /* Dark Navy */
+  --secondary: 195 100% 89%; /* Very Light Cyan */
+  --secondary-foreground: 213 32% 17%; /* Dark Navy */
+  --muted: 195 100% 89%; /* Very Light Cyan */
+  --muted-foreground: 207 89% 43%; /* Blue */
+  --accent: 212 100% 41%; /* Bright Cyan */
+  --accent-foreground: 195 100% 95%; /* Light Cyan */
+  --destructive: 0 76% 42%; /* Red */
+  --destructive-foreground: 195 100% 95%; /* Light Cyan */
+  --border: 195 100% 89%; /* Very Light Cyan */
+  --input: 195 100% 89%; /* Very Light Cyan */
+  --ring: 212 100% 41%; /* Bright Cyan */
+  --chart-1: 195 100% 89%; /* Very Light Cyan */
+  --chart-2: 212 100% 41%; /* Bright Cyan */
+  --chart-3: 207 89% 43%; /* Blue */
+  --chart-4: 213 32% 17%; /* Dark Navy */
+  --chart-5: 195 100% 95%; /* Light Cyan */
+}
 
 @layer base {
   * {
