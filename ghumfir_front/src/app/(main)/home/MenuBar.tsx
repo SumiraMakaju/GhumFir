@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import {  BookAIcon, Home, Hotel, MessageCircleHeartIcon } from "lucide-react";
+import {  BookAIcon, CalendarClock, Home, Hotel, MessageCircleHeartIcon } from "lucide-react";
 import prisma from "@/lib/prisma";
 import { validateRequest } from "@/auth";
 import NotificationsButton from "../notbut";
@@ -47,7 +47,7 @@ const not_count = await prisma.notification.count({
       >
         <Link href="/chats">
           <MessageCircleHeartIcon />
-          <span className="hidden lg:inline">Messages</span>
+          <span className="hidden lg:inline">Chats</span>
         </Link>
       </Button>
 
@@ -71,7 +71,19 @@ const not_count = await prisma.notification.count({
       >
         <Link href="/Diaries">
           <BookAIcon/>
-          <span className="hidden lg:inline">Hotels</span>
+          <span className="hidden lg:inline">Diaries</span>
+        </Link>
+      </Button>
+
+      <Button
+        variant="ghost"
+        className="flex items-center justify-start gap-3"
+        title="Events"
+        asChild
+      >
+        <Link href="/events">
+          <CalendarClock/>
+          <span className="hidden lg:inline">Events</span>
         </Link>
       </Button>
     </div>

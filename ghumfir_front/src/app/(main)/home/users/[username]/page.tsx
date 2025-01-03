@@ -33,7 +33,7 @@ const getUser = cache(async (username: string, loggedInUser: string) => {
 
 // Generate dynamic metadata
 export async function generateMetadata({ params }: PageProps) {
-  const { username } = params;
+  const { username } = await(params);
 
   const { user: loggedInUser } = await validateRequest();
 
@@ -48,7 +48,7 @@ export async function generateMetadata({ params }: PageProps) {
 
 // Main Page component
 export default async function Page({ params }: PageProps) {
-  const { username } = params;
+  const { username } = await(params);
 
   const { user: loggedInUser } = await validateRequest();
 
