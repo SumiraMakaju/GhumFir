@@ -5,77 +5,68 @@
 @import "~stream-chat-react/dist/css/v2/index.css";
 
 body {
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: Arial, Helvetica, sans-serif; /* Clean, modern font */
 }
+
 :root {
   /* Base colors */
-  --background: 210 60% 85%; /* Soft powder blue with lighter shade */
-  --foreground: 215 35% 30%; /* Gentle navy */
+  --background: 30 100% 97%; /* Soft peachy white */
+  --foreground: 15 20% 25%; /* Warm muted brown */
 
   /* Container styles */
-  --card: 40 30% 95%; /* Soft creamy white */
-  --card-foreground: 215 35% 0%; /* Gentle navy */
-  --popover: 40 30% 97%; /* Soft creamy white */
-  --popover-foreground: 215 35% 25%; /* Gentle navy */
+  --card: 0 0% 100%; /* Light cream */
+  --card-foreground: 15 20% 25%; /* Warm muted brown */
+  --popover: 40 70% 97%; /* Light cream */
+  --popover-foreground: 15 20% 25%; /* Warm muted brown */
 
-  /* Primary colors */
-  /* --primary: 205 55% 70%;         */
-  /* Soft pastel blue */
-  --primary: 205 60% 50%;
-  --primary-foreground: 0 0% 100%; /* Pure white */
+  /* Primary colors (Sunset Gradient) */
+  --primary: linear-gradient(45deg, hsl(330, 70%, 60%), hsl(20, 90%, 65%), hsl(45, 85%, 60%)); /* Pink, Orange, Yellow */
+  --primary-foreground: 0 0% 100%; /* Pure white for contrast */
 
   /* Secondary colors */
-  --secondary: 200 45% 75%; /* Light ocean mist */
+  --secondary: 20 80% 60%; /* Warm sunset orange */
   --secondary-foreground: 0 0% 100%; /* Pure white */
 
   /* Accent and muted */
-  --muted: 205 35% 85%; /* Soft sky blue */
-  --muted-foreground: 215 35% 35%; /* Muted navy */
-  --accent: 205 45% 75%; /* Gentle azure */
+  --muted: 30 60% 90%; /* Soft sunset cream */
+  --muted-foreground: 15 20% 40%; /* Muted brown */
+  --accent: 340 70% 60%; /* Vibrant magenta for accents */
   --accent-foreground: 0 0% 100%; /* Pure white */
 
   /* Utility colors */
-  --destructive: 0 65% 65%; /* Soft coral */
+  --destructive: 0 80% 60%; /* Bright sunset red */
   --destructive-foreground: 0 0% 100%; /* Pure white */
-  --border: 205 35% 85%; /* Soft sky border */
-  --input: 205 35% 85%; /* Soft sky input */
-  --ring: 205 55% 70%; /* Soft pastel blue ring */
+  --border: 30 50% 85%; /* Light beige for borders */
+  --input: 30 50% 95%; /* Light peach for inputs */
+  --ring: 340 70% 60%; /* Magenta ring for focus */
 
-  /* Chart colors */
-  --chart-1: 215 35% 25%; /* Gentle navy */
-  --chart-2: 205 55% 70%; /* Soft pastel blue */
-  --chart-3: 200 45% 75%; /* Light ocean mist */
-  --chart-4: 205 35% 85%; /* Soft sky blue */
-  --chart-5: 40 30% 97%; /* Soft creamy white */
-
-  --radius: 0.75rem;
+  /* Radius for rounded elements */
+  --radius: 0.8rem;
 }
 
 .dark {
-  --background: 213 32% 17%; /* Dark Navy for dark theme */
-  --foreground: 195 100% 95%; /* Light Cyan */
-  --card: 213 32% 17%; /* Dark Navy */
-  --card-foreground: 195 100% 95%; /* Light Cyan */
-  --popover: 213 32% 17%; /* Dark Navy */
-  --popover-foreground: 195 100% 95%; /* Light Cyan */
-  --primary: 195 100% 95%; /* Light Cyan */
-  --primary-foreground: 213 32% 17%; /* Dark Navy */
-  --secondary: 195 100% 89%; /* Very Light Cyan */
-  --secondary-foreground: 213 32% 17%; /* Dark Navy */
-  --muted: 195 100% 89%; /* Very Light Cyan */
-  --muted-foreground: 207 89% 43%; /* Blue */
-  --accent: 212 100% 41%; /* Bright Cyan */
-  --accent-foreground: 195 100% 95%; /* Light Cyan */
-  --destructive: 0 76% 42%; /* Red */
-  --destructive-foreground: 195 100% 95%; /* Light Cyan */
-  --border: 195 100% 89%; /* Very Light Cyan */
-  --input: 195 100% 89%; /* Very Light Cyan */
-  --ring: 212 100% 41%; /* Bright Cyan */
-  --chart-1: 195 100% 89%; /* Very Light Cyan */
-  --chart-2: 212 100% 41%; /* Bright Cyan */
-  --chart-3: 207 89% 43%; /* Blue */
-  --chart-4: 213 32% 17%; /* Dark Navy */
-  --chart-5: 195 100% 95%; /* Light Cyan */
+  --background: 240 20% 15%; /* Dark muted navy */
+  --foreground: 0 0% 90%; /* Soft white text */
+  --card: 240 20% 20%; /* Dark navy for cards */
+  --card-foreground: 0 0% 90%; /* Soft white */
+  --popover: 240 20% 20%; /* Dark navy */
+  --popover-foreground: 0 0% 90%; /* Soft white */
+
+  --primary: linear-gradient(45deg, hsl(330, 70%, 50%), hsl(20, 90%, 55%), hsl(45, 85%, 50%)); /* Darker pink-orange-yellow gradient */
+  --primary-foreground: 0 0% 100%; /* Pure white */
+  --secondary: 20 80% 50%; /* Sunset orange */
+  --secondary-foreground: 0 0% 100%; /* Pure white */
+
+  --muted: 240 20% 25%; /* Dark muted navy */
+  --muted-foreground: 0 0% 90%; /* Light muted text */
+  --accent: 340 70% 50%; /* Bright magenta */
+  --accent-foreground: 0 0% 100%; /* Pure white */
+
+  --destructive: 0 80% 50%; /* Deep red */
+  --destructive-foreground: 0 0% 100%; /* Pure white */
+  --border: 240 20% 25%; /* Dark muted navy */
+  --input: 240 20% 30%; /* Dark muted navy */
+  --ring: 340 70% 50%; /* Magenta ring for focus */
 }
 
 @layer base {
@@ -85,33 +76,57 @@ body {
   body {
     @apply bg-background text-foreground;
   }
+
+  a {
+    color: var(--primary);
+    text-decoration: none;
+    font-weight: 600;
+  }
+
+  a:hover {
+    text-decoration: underline;
+  }
+
+  button {
+    background: var(--primary);
+    color: var(--primary-foreground);
+    border-radius: var(--radius);
+    padding: 0.5rem 0.5rem;
+    font-weight: bold;
+    transition: background 0.3s ease;
+  }
+
+  button:hover {
+    background: linear-gradient(45deg, hsl(330, 70%, 50%), hsl(20, 90%, 55%), hsl(45, 85%, 50%));
+  }
+
+  input, textarea {
+    background-color: var(--input);
+    border: 1px solid var(--border);
+    color: var(--foreground);
+    border-radius: var(--radius);
+    padding: 10px;
+    width: 100%;
+    box-sizing: border-box;
+    font-size: 16px;
+  }
+
+  input:focus, textarea:focus {
+    border-color: var(--ring);
+    outline: none;
+  }
 }
+
 .str-chat {
   --str-chat__font-family: inherit;
-  --str-chat__primary-color: theme(colors.primary.DEFAULT);
-  --str-chat__on-primary-color: theme(colors.primary.foreground);
-  --str-chat__active-primary-color: theme(colors.primary.foreground);
-  --str-chat__primary-color-low-emphasis: color-mix(
-    in hsl,
-    hsl(var(--primary)) 10%,
-    transparent
-  );
-  --str-chat__background-color: theme(colors.card.DEFAULT);
-  --str-chat__secondary-background-color: theme(colors.card.DEFAULT);
-  --str-chat__message-textarea-background-color: theme(colors.background);
-  --str-chat__channel-preview-active-background-color: theme(
-    colors.accent.DEFAULT
-  );
-  --str-chat__channel-preview-hover-background-color: var(
-    --str-chat__channel-preview-active-background-color
-  );
-  --str-chat__secondary-surface-color: theme(colors.muted.DEFAULT);
-  --str-chat__own-message-bubble-color: theme(colors.primary.foreground);
-  --str-chat__primary-surface-color: theme(colors.primary.DEFAULT);
-  --str-chat__primary-surface-color-low-emphasis: var(
-    --str-chat__primary-color-low-emphasis
-  );
-  --str-chat__disabled-color: theme(colors.muted.DEFAULT);
+  --str-chat__primary-color: var(--primary);
+  --str-chat__on-primary-color: var(--primary-foreground);
+  --str-chat__active-primary-color: var(--primary);
+  --str-chat__background-color: var(--card);
+  --str-chat__secondary-background-color: var(--card);
+  --str-chat__message-textarea-background-color: var(--background);
+  --str-chat__channel-preview-active-background-color: var(--accent);
+  --str-chat__channel-preview-hover-background-color: var(--accent);
   --str-chat__cta-button-border-radius: var(--radius);
 }
 
