@@ -164,3 +164,12 @@ export enum MediaType {
   IMAGE = "IMAGE",
   VIDEO = "VIDEO",
 }
+export interface Event {
+  title: string;
+  location: string;
+  description: string;
+  imageUrl: string;
+  startDate: string;
+  endDate: string;
+  url: string;
+}
