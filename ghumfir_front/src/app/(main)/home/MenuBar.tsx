@@ -5,6 +5,7 @@ import prisma from "@/lib/prisma";
 import { validateRequest } from "@/auth";
 import NotificationsButton from "../notbut";
 
+
 interface MenuBarProps {
   className?: string;
 }

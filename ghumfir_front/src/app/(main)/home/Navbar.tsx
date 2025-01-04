@@ -14,7 +14,7 @@ export default function Navbar() {
              height={40} 
              className="rounded-full"
            />
-         <Link href="/" className="text-2xl font-bold text-primary">
+         <Link href="/" className="text-2xl font-bold text-secondary">
            Ghumfir
          </Link>
  
@@ -22,7 +22,7 @@ export default function Navbar() {
          <SearchField  />
  
          {/* User Button */}
-         <UserButton className="sm:ms-auto" />
+         <UserButton className="sm:ms-auto bg-slate-300" />
        </div>
      </header>
    );
