@@ -1,5 +1,6 @@
 import React from 'react';
 
+
 type EventCardProps = {
   title: string;
   location: string;
@@ -13,8 +14,7 @@ const EventCard: React.FC<EventCardProps> = ({ title, location, description, ima
     < a href = { url } >
     <div className="bg-primary-foreground shadow-lg rounded-lg overflow-hidden hover:scale-105 transition-transform">
       <img
-        src={imageUrl}
-        alt={title}
+        src={imageUrl|| '/place-holder.jpg'}
         className="w-full h-48 object-cover"
       />
       <div className="p-4">
