@@ -49,7 +49,7 @@ export async function GET(
 
 export async function POST(
   req: Request,
-  { params }: { params: { postid: string } }  // Changed to lowercase
+  { params }: { params: { postId: string } }  // Changed to lowercase
 ) {
   try {
     const { user: loggedInUser } = await validateRequest();
@@ -57,14 +57,14 @@ export async function POST(
       return Response.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const postid = await(params.postid);  // Get the postid from params
+    const postid = await(params.postId);  // Get the postid from params
     
     if (!postid) {
       return Response.json({ error: "Post ID is required" }, { status: 400 });
     }
 
     const post = await prisma.post.findUnique({
-      where: { id: await(params.postid) },
+      where: { id: postid },
       select: {
         userId: true
       }
@@ -113,16 +113,17 @@ export async function POST(
 
 export async function DELETE(
   req: Request,
-  { params }: { params: { postid: string } }  // Changed to lowercase
+  { params }: { params: { postId: string } }  // Changed to lowercase
 ) {
   try {
+    const postid = await(params.postId);  // Get the postid from params
     const { user: loggedInUser } = await validateRequest();
     if (!loggedInUser) {
       return Response.json({ error: "Unauthorized" }, { status: 401 });
     }
 
     const post = await prisma.post.findUnique({
-      where: {id: params.postid},
+      where: {id: postid},
       select: {
         userId: true
       }
@@ -136,7 +137,7 @@ export async function DELETE(
       prisma.like.deleteMany({
         where: {
           userId: loggedInUser.id,
-          postId: params.postid
+          postId: postid
         }
       }),
       prisma.notification.deleteMany({
@@ -144,7 +145,7 @@ export async function DELETE(
           issuerId: loggedInUser.id,
           recipientId: post.userId,
           type: "LIKE",
-          postId: params.postid
+          postId: postid
         },
       }),
     ]);
@@ -153,7 +154,7 @@ export async function DELETE(
     await prisma.like.deleteMany({
       where: {
         userId: loggedInUser.id,
-        postId: params.postid  // Changed to params.postid
+        postId: postid  // Changed to params.postid
       }
     });
 

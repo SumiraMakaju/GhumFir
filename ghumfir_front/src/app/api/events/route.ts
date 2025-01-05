@@ -196,7 +196,7 @@ export async function GET(req: Request) {
           title: data.name?.text,
           location: data.venue?.name || 'Location TBA',
           description: data.description?.text,
-          imageUrl: data.logo?.url || './assets/place-holder.jpg',
+          imageUrl: data.logo?.url || null,
           startDate: data.start?.local,
           endDate: data.end?.local,
           url: data.url
