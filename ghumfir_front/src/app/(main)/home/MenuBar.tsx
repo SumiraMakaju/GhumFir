@@ -4,6 +4,8 @@ import {  BookAIcon, CalendarClock, Home, Hotel, MessageCircleHeartIcon } from "
 import prisma from "@/lib/prisma";
 import { validateRequest } from "@/auth";
 import NotificationsButton from "../notbut";
+import ChatButton from "../chatbutton";
+import streamServerClient from "@/lib/stream"; 
 
 
 interface MenuBarProps {
@@ -16,12 +18,15 @@ const {user} = await validateRequest();
 
 if (!user) return null;
 
-const not_count = await prisma.notification.count({
-  where: {
-    recipientId: user.id,
-    read: false,
-  },
-});
+const [unreadNotificationsCount, unreadMessagesCount] = await Promise.all([
+  prisma.notification.count({
+    where: {
+      recipientId: user.id,
+      read: false,
+    },
+  }),
+  (await streamServerClient.getUnreadCount(user.id)).total_unread_count,
+]);
 
   return (
     <div className={className}>
@@ -37,20 +42,10 @@ const not_count = await prisma.notification.count({
         </Link>
       </Button>
 
-      <NotificationsButton initialState={{ unreadCount: not_count }} />
+      <NotificationsButton initialState={{ unreadCount: unreadNotificationsCount }} />
       
 
-      <Button
-        variant="ghost"
-        className="flex items-center justify-start gap-3"
-        title="Messages"
-        asChild
-      >
-        <Link href="/chats">
-          <MessageCircleHeartIcon />
-          <span className="hidden lg:inline">Chats</span>
-        </Link>
-      </Button>
+        <ChatButton initialState={{ unreadCount: unreadMessagesCount}} />
 
       <Button
         variant="ghost"
