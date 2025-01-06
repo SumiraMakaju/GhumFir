@@ -49,7 +49,7 @@ export async function GET(
 
 export async function POST(
   req: Request,
-  { params : {postId}}: { params: { postId: string } }  // Changed to lowercase
+  { params }: { params: { postId: string } }  // Changed to lowercase
 ) {
   try {
     const { user: loggedInUser } = await validateRequest();
@@ -57,14 +57,14 @@ export async function POST(
       return Response.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    //const postid = await(params.postId);  // Get the postid from params
+    const postid = await(params.postId);  // Get the postid from params
     
-    //if (!postid) {
-    //  return Response.json({ error: "Post ID is required" }, { status: 400 });
-    //}
+    if (!postid) {
+      return Response.json({ error: "Post ID is required" }, { status: 400 });
+    }
 
     const post = await prisma.post.findUnique({
-      where: { id: postId },
+      where: { id: postid },
       select: {
         userId: true
       }
@@ -79,12 +79,12 @@ export async function POST(
       where: {
         userId_postId: {
           userId: loggedInUser.id,
-          postId,
-        },
+          postId: postid
+        }
       },
       create: {
         userId: loggedInUser.id,
-        postId,
+        postId: postid
       },
       update: {}  // No updates needed for like toggle
     });
@@ -95,7 +95,7 @@ export async function POST(
           issuerId: loggedInUser.id,
           recipientId: post.userId,
           type: "LIKE",
-          postId,
+          postId: postid,
           read: false
         }
       });
@@ -113,17 +113,17 @@ export async function POST(
 
 export async function DELETE(
   req: Request,
-  { params: {postId} }: { params: { postId: string } }  // Changed to lowercase
+  { params }: { params: { postId: string } }  // Changed to lowercase
 ) {
   try {
-    //const postid = await(params.postId);  // Get the postid from params
+    const postid = await(params.postId);  // Get the postid from params
     const { user: loggedInUser } = await validateRequest();
     if (!loggedInUser) {
       return Response.json({ error: "Unauthorized" }, { status: 401 });
     }
 
     const post = await prisma.post.findUnique({
-      where: {id: postId},
+      where: {id: postid},
       select: {
         userId: true
       }
@@ -137,15 +137,15 @@ export async function DELETE(
       prisma.like.deleteMany({
         where: {
           userId: loggedInUser.id,
-          postId,
-        },
+          postId: postid
+        }
       }),
       prisma.notification.deleteMany({
         where: {
           issuerId: loggedInUser.id,
           recipientId: post.userId,
           type: "LIKE",
-          postId,
+          postId: postid
         },
       }),
     ]);
@@ -154,7 +154,7 @@ export async function DELETE(
     await prisma.like.deleteMany({
       where: {
         userId: loggedInUser.id,
-        postId,  // Changed to params.postid
+        postId: postid  // Changed to params.postid
       }
     });
 
