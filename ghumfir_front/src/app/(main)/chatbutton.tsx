@@ -15,7 +15,7 @@ export default function ChatButton({ initialState }: ChatButtonProps) {
   const { data } = useQuery({
     queryKey: ["unread-messages-count"],
     queryFn: () =>
-      kyInstance.get("/api/chats").json<MessageCountInfo>(),
+      kyInstance.get("/api/chats/unreadcount").json<MessageCountInfo>(),
     initialData: initialState,
     refetchInterval: 60 * 1000,
   });

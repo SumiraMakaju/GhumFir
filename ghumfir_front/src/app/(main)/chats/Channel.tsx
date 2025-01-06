@@ -40,17 +40,14 @@ export default function ChatChannel({ open, openSidebar }: ChatChannelProps) {
   }, []);
 
   return (
-    <div className={cn("w-full md:block innerheight-600px", !open && "hidden") }>
+    <div className={cn("w-full md:block h-full", !open && "hidden") }>
       <Channel EmojiPicker={EmojiPicker} emojiSearchIndex={SearchIndex}>
         <Window>
           <CustomChannelHeader openSidebar={openSidebar} />
           {/* Scrollable Message List */}
-        <div
-          className="flex-grow overflow-y-auto" // Flex-grow makes it occupy remaining space
-          style={{ maxHeight: "600px" }} // Adjust height dynamically (yet to make {sumira will})
-        >
+        
           <MessageList />
-        </div>
+        
           <MessageInput/>
         </Window>
       </Channel>

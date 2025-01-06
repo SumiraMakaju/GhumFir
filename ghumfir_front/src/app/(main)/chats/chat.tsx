@@ -3,6 +3,7 @@
 import { Loader2 } from "lucide-react";
 import ChatClient from "./chat_client";
 import {Chat as ChatUI} from "stream-chat-react";
+import { useTheme } from "next-themes";
 import Side from "./side";
 import ChatChannel from "./Channel";
 import { useEffect, useState } from "react";
@@ -12,6 +13,7 @@ import {useSession} from "../SessionProvider";
 
 export default function Chat() {
     const chatClient = ChatClient();
+    const {resolvedTheme} = useTheme();
     const [showModal, setShowModal] = useState(false);
     const {session} = useSession();
     const [mutualFollowers, setMutualFollowers] = useState<UserData[] | null>(null);
@@ -48,7 +50,13 @@ export default function Chat() {
         <main className="relative w-full overflow-hidden rounded-2xl bg-card shadow-sm">
             <div className="absolute bottom-0 top-0 flex w-full">
             
-                <ChatUI client={chatClient}>
+                <ChatUI client={chatClient}
+                    theme={
+                        resolvedTheme === "dark"
+                          ? "str-chat__theme-dark"
+                          : "str-chat__theme-light"
+                    }
+                >
                 <button 
                         className="fixed bottom-4 left bg-blue-500 text-white px-4 py-2 rounded-lg shadow-md hover:bg-blue-600" 
                         onClick={() => setShowModal(true)}
