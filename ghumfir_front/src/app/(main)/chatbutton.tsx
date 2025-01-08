@@ -2,24 +2,20 @@
 
 import { Button } from "@/components/ui/button";
 import kyInstance from "@/lib/ky";
-import { NotificationCountInfo } from "@/lib/types";
+import { MessageCountInfo } from "@/lib/types";
 import { useQuery } from "@tanstack/react-query";
-import { Bell } from "lucide-react";
+import { Mail, MessageCircleHeart } from "lucide-react";
 import Link from "next/link";
 
-interface NotificationsButtonProps {
-  initialState: NotificationCountInfo;
+interface ChatButtonProps {
+  initialState: MessageCountInfo;
 }
 
-export default function NotificationsButton({
-  initialState,
-}: NotificationsButtonProps) {
+export default function ChatButton({ initialState }: ChatButtonProps) {
   const { data } = useQuery({
-    queryKey: ["unread-notification-count"],
+    queryKey: ["unread-messages-count"],
     queryFn: () =>
-      kyInstance
-        .get("/api/notifications/count")
-        .json<NotificationCountInfo>(),
+      kyInstance.get("/api/chats/unreadcount").json<MessageCountInfo>(),
     initialData: initialState,
     refetchInterval: 60 * 1000,
   });
@@ -28,19 +24,19 @@ export default function NotificationsButton({
     <Button
       variant="ghost"
       className="flex items-center justify-start gap-3"
-      title="Notifications"
+      title="Messages"
       asChild
     >
-      <Link href="/notifications">
+      <Link href="/chats">
         <div className="relative">
-          <Bell />
+          <MessageCircleHeart />
           {!!data.unreadCount && (
             <span className="absolute -right-1 -top-1 rounded-full bg-secondary px-1 text-xs font-medium tabular-nums text-primary-foreground">
               {data.unreadCount}
             </span>
           )}
         </div>
-        <span className="hidden lg:inline">Notifications</span>
+        <span className="hidden lg:inline">Chats</span>
       </Link>
     </Button>
   );
