@@ -50,7 +50,7 @@ const HotelCard: React.FC<HotelProps> = ({
           {description}
         </p>
       </div>
-      <div className="p-4 bg-secondary">
+      <div className="p-4 bg-muted">
         <Button
         onClick={(e) => {
             e.stopPropagation();

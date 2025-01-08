@@ -47,7 +47,7 @@ async function WhoToFollow(){
     })
     return (
         <div className="space-y-5 rounded-2xl bg-card p-5 shadow-sm">
-          <div className="text-xl font-bold">{"Let's travel together!"}</div>
+          <div className="text-xl font-bold text-secondary">{"Let's travel together!"}</div>
           {userstofollow && userstofollow.map((user) => (
             <div key={user.id} className="flex items-center justify-between gap-3">
               <UserTooltip user={user}>
@@ -106,7 +106,7 @@ async function WhoToFollow(){
     async function Trends(){
         const trends = await gettrends();
         return <div className="space-y-5 rounded-2xl bg-card p-5 shadow-sm">
-            <div className="text-xl font-bold">Travel Hashtags</div>
+            <div className="text-xl font-bold text-secondary">Travel Hashtags</div>
             {trends.map(({hashtag, count}: {hashtag: string, count: number}) => {
                 const title = hashtag.split("#")[1];
 
