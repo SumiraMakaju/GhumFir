@@ -82,6 +82,17 @@ const [unreadNotificationsCount, unreadMessagesCount] = await Promise.all([
           <span className="hidden lg:inline">Events</span>
         </Link>
       </Button>
+      <Button
+        variant="ghost"
+        className="flex items-center justify-start gap-3"
+        title="TripAdvisor"
+        asChild
+      >
+        <Link href="/advice">
+          <CalendarClock/>
+          <span className="hidden lg:inline">TripAdvisor</span>
+        </Link>
+      </Button>
     </div>
   );
 }
