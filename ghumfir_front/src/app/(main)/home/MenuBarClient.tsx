@@ -10,8 +10,8 @@ import {
   Home,
   Hotel,
 } from "lucide-react";
-import NotificationsButton from "../notbut"; // Notifications button
-import ChatButton from "../chatbutton"; // Chat button
+import NotificationsButton from "../notbut";
+import ChatButton from "../chatbutton";
 
 interface MenuBarClientProps {
   className?: string;
@@ -26,10 +26,14 @@ export default function MenuBarClient({
 }: MenuBarClientProps) {
   const currentPath = usePathname();
 
+  // Utility for active/inactive styles
   const isActive = (path: string) =>
     currentPath === path
       ? "bg-gradient-to-r from-orange-500 via-pink-500 to-red-500 text-white"
       : "bg-transparent text-gray-700";
+
+  const iconActive = (path: string) =>
+    currentPath === path ? "text-orange-500" : "text-gray-500";
 
   return (
     <div className={`${className} flex gap-4 items-center`}>
@@ -41,20 +45,37 @@ export default function MenuBarClient({
         asChild
       >
         <Link href="/home">
-          <Home />
+          <Home className={iconActive("/home")} />
           <span className="hidden lg:inline">Home</span>
         </Link>
       </Button>
 
       {/* Notifications Button */}
-      <NotificationsButton
-        initialState={{ unreadCount: unreadNotificationsCount }}
-      />
+      <Button
+        variant="ghost"
+        className={`flex items-center justify-start gap-3 ${isActive("/notifications")}`}
+        title="Notifications"
+        asChild
+      >
+        
+          <NotificationsButton
+            initialState={{ unreadCount: unreadNotificationsCount }}
+          />
+        
+      </Button>
 
       {/* Chat Button */}
-      <ChatButton
-        initialState={{ unreadCount: unreadMessagesCount }}
-      />
+      <Button
+        variant="ghost"
+        className={`flex items-center justify-start gap-3 ${isActive("/chat")}`}
+        title="Chat"
+        asChild
+      >
+
+          <ChatButton
+            initialState={{ unreadCount: unreadMessagesCount }}
+          />
+      </Button>
 
       {/* Hotels Button */}
       <Button
@@ -64,7 +85,7 @@ export default function MenuBarClient({
         asChild
       >
         <Link href="/hotels">
-          <Hotel />
+          <Hotel className={iconActive("/hotels")} />
           <span className="hidden lg:inline">Hotels</span>
         </Link>
       </Button>
@@ -77,7 +98,7 @@ export default function MenuBarClient({
         asChild
       >
         <Link href="/Diaries">
-          <BookAIcon />
+          <BookAIcon className={iconActive("/Diaries")} />
           <span className="hidden lg:inline">Diaries</span>
         </Link>
       </Button>
@@ -90,7 +111,7 @@ export default function MenuBarClient({
         asChild
       >
         <Link href="/events">
-          <CalendarClock />
+          <CalendarClock className={iconActive("/events")} />
           <span className="hidden lg:inline">Events</span>
         </Link>
       </Button>
@@ -103,7 +124,7 @@ export default function MenuBarClient({
         asChild
       >
         <Link href="/advice">
-          <Globe2Icon />
+          <Globe2Icon className={iconActive("/advice")} />
           <span className="hidden lg:inline">Advice</span>
         </Link>
       </Button>
