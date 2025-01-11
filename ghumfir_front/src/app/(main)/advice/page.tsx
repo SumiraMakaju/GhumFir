@@ -1,5 +1,5 @@
 import { Metadata } from "next";
-import TripAdvisor from "./advice"; // Import the TripAdvisor component
+import TripAdvisor from "./advices"; // Import the TripAdvisor component
 
 // Define metadata for the page
 export const metadata: Metadata = {
