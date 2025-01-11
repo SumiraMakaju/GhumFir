@@ -32,7 +32,7 @@ model User{
   comments              Comment[]
   receivedNotifications Notification[] @relation("Recipient")
   issuedNotifications   Notification[] @relation("Issuer")
-  diaries               Diaries[]
+  diaries               Diary[]
 
   createdAt DateTime @default(now())
 
@@ -79,6 +79,8 @@ model Media {
   post   Post?     @relation(fields: [postId], references: [id], onDelete: SetNull)
   type   MediaType
   url    String
+  diariesId String?
+  diaries Diary?  @relation(fields: [diariesId], references: [id], onDelete: SetNull)
 
   createdAt DateTime @default(now())
 
@@ -137,12 +139,14 @@ enum NotificationType {
   COMMENT
 }
 
-model Diaries {
-  id String @id
-  title String
-  content String
-  userId String
-  user User @relation(fields: [userId], references: [id])
+model Diary {
+  id                  String         @id @default(cuid())
+  content             String
+  userId              String
+  user                User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  attachments         Media[]
+ 
+  createdAt DateTime @default(now())
 
   @@map("diaries")
 }
