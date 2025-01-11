@@ -6,12 +6,23 @@ import { MessageCountInfo } from "@/lib/types";
 import { useQuery } from "@tanstack/react-query";
 import { Mail, MessageCircleHeart } from "lucide-react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 interface ChatButtonProps {
   initialState: MessageCountInfo;
 }
 
 export default function ChatButton({ initialState }: ChatButtonProps) {
+
+ const currentPath = usePathname();
+
+  // Utility for active/inactive styles
+  const isActive = (path: string) =>
+    currentPath === path
+      ? "bg-gradient-to-r from-orange-500 via-pink-500 to-red-500 text-white"
+      : "bg-transparent text-gray-700";
+      
+
   const { data } = useQuery({
     queryKey: ["unread-messages-count"],
     queryFn: () =>
@@ -23,7 +34,7 @@ export default function ChatButton({ initialState }: ChatButtonProps) {
   return (
     <Button
       variant="ghost"
-      className="flex items-center justify-start gap-3"
+      className={`flex items-center justify-start gap-3 ${isActive("/chats")}`}
       title="Messages"
       asChild
     >

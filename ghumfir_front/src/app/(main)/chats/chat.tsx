@@ -58,7 +58,7 @@ export default function Chat() {
                     }
                 >
                 <button 
-                        className="fixed bottom-4 left bg-blue-500 text-white px-4 py-2 rounded-lg shadow-md hover:bg-blue-600" 
+                        className="fixed bottom-4 left bg-secondary text-white rounded-full p-4 shadow-lg" 
                         onClick={() => setShowModal(true)}
                     >
                         Create Chat

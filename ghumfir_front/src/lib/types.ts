@@ -173,3 +173,28 @@ export interface Event {
   endDate: string;
   url: string;
 }
+
+//diaries
+export type DiariesData = Prisma.DiaryGetPayload<{
+  include: ReturnType<typeof getDiariesDatainclude>;
+}>;
+
+export interface DiariesPage {
+  posts: DiariesData[];
+  nextCursor: string | null;
+}
+export function getDiariesDatainclude(loggedInUserId: string) {
+  return {
+    user: {
+      select: getUserDataSelect(loggedInUserId),
+    },
+    attachments: {
+      select: {
+        id: true,
+        type: true,
+        url: true,
+        createdAt: true
+      }
+    },
+  } satisfies Prisma.DiaryInclude;
+}
