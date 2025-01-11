@@ -20,7 +20,7 @@ export default function ChatButton({ initialState }: ChatButtonProps) {
   const isActive = (path: string) =>
     currentPath === path
       ? "bg-gradient-to-r from-orange-500 via-pink-500 to-red-500 text-white"
-      : "bg-transparent text-gray-700";
+      : "bg-transparent text-secondary-700";
       
 
   const { data } = useQuery({

@@ -30,10 +30,10 @@ export default function MenuBarClient({
   const isActive = (path: string) =>
     currentPath === path
       ? "bg-gradient-to-r from-orange-500 via-pink-500 to-red-500 text-white"
-      : "bg-transparent text-gray-700";
+      : "bg-transparent text-secondaru-700";
 
   const iconActive = (path: string) =>
-    currentPath === path ? "text-orange-500" : "text-gray-500";
+    currentPath === path ? "text-orange-500" : "text-secondary-500";
 
   return (
     <div className={`${className} flex gap-4 items-center`}>
@@ -50,37 +50,18 @@ export default function MenuBarClient({
         </Link>
       </Button>
 
-      {/* Notifications Button */}
-      <Button
-        variant="ghost"
-        className={`flex items-center justify-start gap-3 ${isActive("/notifications")}`}
-        title="Notifications"
-        asChild
-      >
-        
+       
           <NotificationsButton
             initialState={{ unreadCount: unreadNotificationsCount }}
           />
-        
-      </Button>
-
-      {/* Chat Button */}
-      <Button
-        variant="ghost"
-        className={`flex items-center justify-start gap-3 ${isActive("/chat")}`}
-        title="Chat"
-        asChild
-      >
-
           <ChatButton
             initialState={{ unreadCount: unreadMessagesCount }}
           />
-      </Button>
 
       {/* Hotels Button */}
       <Button
         variant="ghost"
-        className={`flex items-center justify-start gap-3 ${isActive("/hotels")}`}
+        className={`text-secondary flex items-center justify-start gap-3 ${isActive("/hotels")}`}
         title="Hotels"
         asChild
       >
