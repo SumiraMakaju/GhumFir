@@ -6,6 +6,8 @@ import { NotificationCountInfo } from "@/lib/types";
 import { useQuery } from "@tanstack/react-query";
 import { Bell } from "lucide-react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
+
 
 interface NotificationsButtonProps {
   initialState: NotificationCountInfo;
@@ -14,6 +16,15 @@ interface NotificationsButtonProps {
 export default function NotificationsButton({
   initialState,
 }: NotificationsButtonProps) {
+
+  const currentPath = usePathname();
+
+  // Utility for active/inactive styles
+  const isActive = (path: string) =>
+    currentPath === path
+      ? "bg-gradient-to-r from-orange-500 via-pink-500 to-red-500 text-white"
+      : "bg-transparent text-gray-700";
+      
   const { data } = useQuery({
     queryKey: ["unread-notification-count"],
     queryFn: () =>
@@ -27,7 +38,7 @@ export default function NotificationsButton({
   return (
     <Button
       variant="ghost"
-      className="flex items-center justify-start gap-3"
+      className={`flex items-center justify-start gap-3 ${isActive("/notifications")}`}
       title="Notifications"
       asChild
     >
