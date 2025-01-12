@@ -180,7 +180,7 @@ export type DiariesData = Prisma.DiaryGetPayload<{
 }>;
 
 export interface DiariesPage {
-  posts: DiariesData[];
+  diaries: DiariesData[];
   nextCursor: string | null;
 }
 export function getDiariesDatainclude(loggedInUserId: string) {

@@ -1,27 +1,4 @@
 
-// import React from 'react';
-// import { Button } from '@/components/ui/button';
-
-// export type HotelCardProps = {
-//   hotelName: string;
-//   city: string;
-//   country: string;
-//   rating?: string;
-//   offers: Array<{
-//     offerId: string;
-//     roomType: string;
-//     roomDescription: string;
-//     price: {
-//       amount: string;
-//       currency: string;
-//     };
-//   }>;
-//   imageUrl?: string;
-// };
-
-// const HotelCard: React.FC<HotelCardProps> = // ... (HotelCard component code from the paste)
-
-// export default HotelCard;
 // HotelCard.tsx
 import { Button } from "@/components/ui/button";
 import React from "react";
