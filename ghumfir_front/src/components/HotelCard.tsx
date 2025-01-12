@@ -1,68 +1,66 @@
 
-// HotelCard.tsx
-import { Button } from "@/components/ui/button";
-import React from "react";
 
-export interface HotelProps {
-  id: number;
-  name: string;
-  location: string;
-  rating: number;
-  reviews: string[];
-  price: number;
-  description: string;
-  availableFrom: string;
-  availableTo: string;
-  image: string;
-  onSelect?: () => void;
+// app/components/HotelCard.tsx
+import React from 'react';
+import { Card, CardContent } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+
+interface HotelCardProps {
+  hotelName: string;
+  city: string;
+  country: string;
+  rating?: string;
+  offers: Array<{
+    offerId: string;
+    roomType: string;
+    roomDescription: string;
+    price: {
+      amount: string;
+      currency: string;
+    };
+  }>;
+  imageUrl?: string;
 }
 
-const HotelCard: React.FC<HotelProps> = ({
-  name,
-  location,
+export const HotelCard: React.FC<HotelCardProps> = ({
+  hotelName,
+  city,
+  country,
   rating,
-  price,
-  description,
-  image,
-  onSelect,
+  offers,
+  imageUrl,
 }) => {
+  const lowestPrice = offers.reduce((min, offer) =>
+    parseFloat(offer.price.amount) < parseFloat(min.price.amount) ? offer : min
+  );
+
   return (
-    <div
-      className="bg-card rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300"
-      onClick={onSelect}
-    >
+    <Card className="overflow-hidden hover:shadow-lg transition-shadow">
       <img
-        src={image}
-        alt={name}
+        src={imageUrl || '/api/placeholder/400/200'}
+        alt={hotelName}
         className="w-full h-48 object-cover"
       />
-      <div className="p-4">
-        <h3 className="text-lg font-bold text-primary">{name}</h3>
-        <p className="text-sm text-muted-foreground">{location}</p>
-        <div className="flex items-center justify-between mt-2">
-          <p className="text-muted-foreground font-semibold">
-            NPR {price} / night
-          </p>
-          <p className="text-yellow-500 font-semibold flex items-center">
-            ⭐ {rating.toFixed(1)}
+      <CardContent className="p-4">
+        <h3 className="text-lg font-semibold">{hotelName}</h3>
+        <p className="text-sm text-muted-foreground">{city}, {country}</p>
+        {rating && (
+          <div className="flex items-center gap-1 mt-1">
+            <span>⭐</span>
+            <span className="text-sm">{rating}</span>
+          </div>
+        )}
+        <div className="mt-4">
+          <p className="text-sm text-muted-foreground">From</p>
+          <p className="text-xl font-bold">
+            {parseFloat(lowestPrice.price.amount).toLocaleString('en-US', {
+              style: 'currency',
+              currency: lowestPrice.price.currency,
+            })}
           </p>
         </div>
-        <p className="text-sm text-muted-foreground mt-3 line-clamp-3">
-          {description}
-        </p>
-      </div>
-      <div className="p-4 bg-muted">
-        <Button
-        onClick={(e) => {
-            e.stopPropagation();
-            if (onSelect) onSelect();
-          }}
-        >
-          View Details
-        </Button>
-      </div>
-    </div>
+        <Button className="w-full mt-4">View Details</Button>
+      </CardContent>
+    </Card>
   );
 };
-
-export default HotelCard;
