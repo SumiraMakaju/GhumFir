@@ -8,18 +8,33 @@ export default async function Diaries(){
         include:{
           user:{
             select:{
-                username:true,
-                displayName:true,
-                avatarUrl:true,
+                id: true,
+                createdAt: true,
+                _count: {
+                    select: {
+                        posts: true,
+                        followers: true,
+                    },
+                },
+                username: true,
+                displayName: true,
+                avatarUrl: true,
+                bio: true,
+                followers: {
+                    select: {
+                        followerId: true,
+                    },
+                },
             },
-            //attachments:true,
           },
+          attachments:true,
         },
 
         orderBy:{createdAt:"desc"}
     })
 
-    return (<main className="flex w-full min-w-0 gap-5">
+    return (
+    <main className="flex w-full min-w-0 gap-5">
         <div className="w-full min-w-0 space-y-5"> 
         <DiaryEditor/>
         {diaries.map((diary)=>(
