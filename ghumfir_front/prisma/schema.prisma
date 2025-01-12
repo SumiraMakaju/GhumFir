@@ -1,57 +1,49 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
   previewFeatures = ["fullTextSearchPostgres"]
 }
 
-// prisma/schema.prisma
 datasource db {
-  provider  = "postgresql"
-  url  	    = env("POSTGRES_PRISMA_URL")  
+  provider = "postgresql"
+  url      = env("POSTGRES_PRISMA_URL")
 }
 
-model User{
-  id String @id 
-  username String @unique
-  displayName String
-  email String? @unique
-  passwordHash String?
-  googleId String? @unique
-  avatarUrl String?
-  bio String?
-  sessions Session[]
-   posts                 Post[]
+model User {
+  id                    String         @id
+  username              String         @unique
+  displayName           String
+  email                 String?        @unique
+  passwordHash          String?
+  googleId              String?        @unique
+  avatarUrl             String?
+  bio                   String?
+  createdAt             DateTime       @default(now())
+  comments              Comment[]
+  diaries               Diary[]
   following             Follow[]       @relation("Following")
   followers             Follow[]       @relation("Followers")
   likes                 Like[]
-  comments              Comment[]
-  receivedNotifications Notification[] @relation("Recipient")
   issuedNotifications   Notification[] @relation("Issuer")
-  diaries               Diary[]
-
-  createdAt DateTime @default(now())
+  receivedNotifications Notification[] @relation("Recipient")
+  posts                 Post[]
+  sessions              Session[]
 
   @@map("users")
 }
 
-model Session{
-  id String @id
-  userId String
+model Session {
+  id        String   @id
+  userId    String
   expiresAt DateTime
-  user User @relation(fields: [userId], references: [id])
+  user      User     @relation(fields: [userId], references: [id])
 
   @@map("sessions")
 }
 
 model Follow {
   followerId  String
-  follower    User   @relation("Following", fields: [followerId], references: [id], onDelete: Cascade)
   followingId String
+  follower    User   @relation("Following", fields: [followerId], references: [id], onDelete: Cascade)
   following   User   @relation("Followers", fields: [followingId], references: [id], onDelete: Cascade)
 
   @@unique([followerId, followingId])
@@ -62,45 +54,37 @@ model Post {
   id                  String         @id @default(cuid())
   content             String
   userId              String
-  user                User           @relation(fields: [userId], references: [id], onDelete: Cascade)
-  attachments         Media[]
-  likes               Like[]
+  createdAt           DateTime       @default(now())
   comments            Comment[]
+  likes               Like[]
   linkedNotifications Notification[]
-
-  createdAt DateTime @default(now())
+  attachments         Media[]
+  user                User           @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@map("posts")
 }
 
 model Media {
-  id     String    @id @default(cuid())
-  postId String?
-  post   Post?     @relation(fields: [postId], references: [id], onDelete: SetNull)
-  type   MediaType
-  url    String
+  id        String    @id @default(cuid())
+  postId    String?
+  type      MediaType
+  url       String
+  createdAt DateTime  @default(now())
   diariesId String?
-  diaries Diary?  @relation(fields: [diariesId], references: [id], onDelete: SetNull)
-
-  createdAt DateTime @default(now())
+  diaries   Diary?    @relation(fields: [diariesId], references: [id])
+  post      Post?     @relation(fields: [postId], references: [id])
 
   @@map("post_media")
 }
 
-enum MediaType {
-  IMAGE
-  VIDEO
-}
-
 model Comment {
-  id      String @id @default(cuid())
-  content String
-  userId  String
-  user    User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-  postId  String
-  post    Post   @relation(fields: [postId], references: [id], onDelete: Cascade)
-
+  id        String   @id @default(cuid())
+  content   String
+  userId    String
+  postId    String
   createdAt DateTime @default(now())
+  post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([postId])
   @@map("comments")
@@ -108,45 +92,55 @@ model Comment {
 
 model Like {
   userId String
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
   postId String
   post   Post   @relation(fields: [postId], references: [id], onDelete: Cascade)
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([userId, postId])
   @@map("likes")
 }
 
-
 model Notification {
   id          String           @id @default(cuid())
   recipientId String
-  recipient   User             @relation("Recipient", fields: [recipientId], references: [id], onDelete: Cascade)
   issuerId    String
-  issuer      User             @relation("Issuer", fields: [issuerId], references: [id], onDelete: Cascade)
   postId      String?
-  post        Post?            @relation(fields: [postId], references: [id], onDelete: Cascade)
   type        NotificationType
   read        Boolean          @default(false)
-
-  createdAt DateTime @default(now())
+  createdAt   DateTime         @default(now())
+  issuer      User             @relation("Issuer", fields: [issuerId], references: [id], onDelete: Cascade)
+  post        Post?            @relation(fields: [postId], references: [id], onDelete: Cascade)
+  recipient   User             @relation("Recipient", fields: [recipientId], references: [id], onDelete: Cascade)
 
   @@map("notifications")
+}
+
+model Diary {
+  id          String   @id @default(cuid())
+  content     String
+  userId      String
+  createdAt   DateTime @default(now())
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  attachments Media[]
+
+  @@map("diaries")
+}
+
+model Verified {
+  id                Int       @id @default(autoincrement())
+  email             String    @unique
+  verification_code String
+  verified          Boolean   @default(false)
+  verified_date     DateTime?
+}
+
+enum MediaType {
+  IMAGE
+  VIDEO
 }
 
 enum NotificationType {
   LIKE
   FOLLOW
   COMMENT
-}
-
-model Diary {
-  id                  String         @id @default(cuid())
-  content             String
-  userId              String
-  user                User           @relation(fields: [userId], references: [id], onDelete: Cascade)
-  attachments         Media[]
- 
-  createdAt DateTime @default(now())
-
-  @@map("diaries")
 }

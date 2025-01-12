@@ -206,7 +206,7 @@ export async function GET(request: Request) {
       additional: searchParams.get("additional") || ""
     };
 
-    console.log("Search Params:", searchParams.toString());
+    // console.log("Search Params:", searchParams.toString());
 
     const genAI = new GoogleGenerativeAI(apiKey);
     const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
@@ -219,7 +219,7 @@ export async function GET(request: Request) {
     // console.log("Raw API Response:", response);
 
     const packages = cleanAndParseResponse(response);
-    // console.log("Processed Packages:", packages);
+    console.log("Processed Packages:", packages);
 
     return NextResponse.json({ 
       success: true, 

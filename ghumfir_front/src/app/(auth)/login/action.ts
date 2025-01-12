@@ -41,6 +41,20 @@ export async function login(
         error: "Incorrect username or password",
       };
     }
+    const verified = await prisma.verified.findFirst({
+      where: {
+        userId: existingUser.id,
+      },
+      select:{
+        id:true,
+      }
+    });
+
+    if (!verified) {
+      return {
+        error: "Please verify your email before logging in.",
+      };
+    }
 
     const session = await lucia.createSession(existingUser.id, {});
     const sessionCookie = lucia.createSessionCookie(session.id);

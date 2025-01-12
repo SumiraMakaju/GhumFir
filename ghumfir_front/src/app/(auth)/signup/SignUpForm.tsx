@@ -21,7 +21,6 @@ export default function SignUpForm() {
   const [error, setError] = useState<string>();
 
   const [isPending, startTransition] = useTransition();
-
   const form = useForm<SignUpValues>({
     resolver: zodResolver(signUpSchema),
     defaultValues: {
@@ -63,7 +62,8 @@ export default function SignUpForm() {
             <FormItem>
               <FormLabel>Email</FormLabel>
               <FormControl>
-                <Input placeholder="Email" type="email" {...field} />
+                <Input placeholder="Email" type="email" {...field} 
+                    onChange={(e) => setEmail(e.target.value)} />
               </FormControl>
               <FormMessage />
             </FormItem>

@@ -19,6 +19,15 @@ export default function TripAdvisor() {
   const [filteredRecommendations, setFilteredRecommendations] = useState<TravelPackage[]>([]);
   const [additoinal, setAdditional] = useState<string>("");
 
+  const resetForm = () => {
+    setSearchQuery("");
+    setTransportPreference("");
+    setAccommodationPreference("");
+    setAdditional("");
+    setBudget([10000]); // Reset to default budget
+  };
+
+
   useEffect(() => {
     fetchTravelPackages();
   }, []);
@@ -75,7 +84,8 @@ export default function TripAdvisor() {
 
         setRecommendations(adaptedPackages);
         setFilteredRecommendations(adaptedPackages);
-        setSearchQuery("");
+
+        resetForm();
         } catch (error) {
         console.error("Error in fetchTravelPackages:", error);
         setRecommendations([]);

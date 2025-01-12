@@ -55,12 +55,12 @@ export function adaptTravelPackage(apiPackage: any): TravelPackage {
 
             flight: (() => {
                 const transport = apiPackage.Transport || apiPackage.transport;
-                return formatDetails(transport) || 'No transport information available';
+                return transport;
             })(),
 
             hotel: (() => {
                 const accommodation = apiPackage.Accommodation || apiPackage.accommodation;
-                return formatDetails(accommodation) || 'No hotel information available';
+                return accommodation;
             })(),
 
             activities: (() => {
@@ -72,7 +72,7 @@ export function adaptTravelPackage(apiPackage: any): TravelPackage {
 
             transport: (() => {
                 const transport = apiPackage.Transport || apiPackage.transport;
-                return formatDetails(transport) || 'No transport information available';
+                return transport;
             })(),
 
             accommodation: (() => {
@@ -99,7 +99,7 @@ export function adaptTravelPackage(apiPackage: any): TravelPackage {
         };
 
         // Debug log the adapted package
-        console.log("Adapted Package:", JSON.stringify(adapted, null, 2));
+        // console.log("Adapted Package:", JSON.stringify(adapted, null, 2));
 
         return adapted;
     } catch (error) {
