@@ -67,7 +67,7 @@ export async function GET(
   try {
     const cursor = req.nextUrl.searchParams.get("cursor") || undefined;
     const pageSize = 5;
-    const postId = await params.postId; // Correctly access the postId from params
+    const postId = await(params.postId); // Correctly access the postId from params
     if (!postId) {
       return Response.json({ error: "Post ID is required" }, { status: 400 });
     }

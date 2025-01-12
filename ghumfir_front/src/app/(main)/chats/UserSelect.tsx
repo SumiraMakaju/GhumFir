@@ -60,7 +60,8 @@ const UserListPopup: React.FC<UserListPopupProps> = ({ isOpen, onClose, title, u
 
     try {
       const members = [currentUserId, selectedUser.id].sort();
-      const channelId = `messaging_${members.join('_')}`;
+      const timestamp = Date.now();
+      const channelId = `messaging_${members.join('_')}_${timestamp}`;
       
       const channel = client.channel('messaging', channelId, {
         members,
