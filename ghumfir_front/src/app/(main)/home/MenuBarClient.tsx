@@ -106,7 +106,7 @@ export default function MenuBarClient({
       >
         <Link href="/advice">
           <Globe2Icon className={iconActive("/advice")} />
-          <span className="hidden lg:inline">Advice</span>
+          <span className="hidden lg:inline">Trip Advisor</span>
         </Link>
       </Button>
     </div>

@@ -2,9 +2,10 @@
 
 import { validateRequest } from "@/auth"
 import { createDiarySchema } from "@/lib/validation";
+import { getDiariesDatainclude } from "@/lib/types";
 import prisma from "@/lib/prisma";
 
-export async function submitDiary(input: string){
+export async function submitDiary(input: string) {
     const {user} = await validateRequest();
 
     if(!user){
@@ -13,10 +14,12 @@ export async function submitDiary(input: string){
 
     const { content } = createDiarySchema.parse({content: input});
 
-    await prisma.diary.create({
+    // Return the created diary with includes
+    return await prisma.diary.create({
         data: {
             content,
             userId: user.id
         },
+        include: getDiariesDatainclude(user.id) // Include the related data
     });
 }

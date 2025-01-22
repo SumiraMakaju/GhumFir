@@ -3,18 +3,26 @@ import prisma from "@/lib/prisma";
 import { FollowerInfo } from "@/lib/types";
 import { NextResponse } from "next/server";
 
+
+type Props = {
+  params: Promise<{
+    userId: string;
+  }>;
+};
+
 // GET request to fetch follower info
 export async function GET(
   req: Request,
-  { params: { userId } }: { params: { userId: string } },
+  params: Props
 ) {
   try {
     // Validate the logged-in user
+    const userId = (await params.params).userId;
     const { user: loggedInUser } = await validateRequest();
-
     if (!loggedInUser) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
+
 
     // Fetch the user and their followers
     const user = await prisma.user.findUnique({
@@ -55,10 +63,11 @@ export async function GET(
 // POST request to follow a user
 export async function POST(
   req: Request,
-  { params: { userId } }: { params: { userId: string } },
+  params: Props
 ) {
   try {
     // Validate the logged-in user
+    const userId = (await params.params).userId;
     const { user: loggedInUser } = await validateRequest();
 
     if (!loggedInUser) {
@@ -99,10 +108,11 @@ export async function POST(
 // DELETE request to unfollow a user
 export async function DELETE(
   req: Request,
-  { params: { userId } }: { params: { userId: string } },
+  params: Props
 ) {
   try {
     // Validate the logged-in user
+    const userId = (await params.params).userId;
     const { user: loggedInUser } = await validateRequest();
 
     if (!loggedInUser) {

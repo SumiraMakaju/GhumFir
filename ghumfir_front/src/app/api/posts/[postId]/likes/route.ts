@@ -1,19 +1,26 @@
 import { validateRequest } from "@/auth";
 import prisma from "@/lib/prisma";
 import { LikeInfo } from "@/lib/types";
+import { NextRequest, NextResponse } from "next/server";
+
+type Props = {
+  params:  Promise<{ 
+   postId: string 
+ }> };
 
 export async function GET(
-  req: Request,
-  { params }: { params: { postid: string } }  // Changed to lowercase
+  req: NextRequest,
+  params : Props
 ) {
+  const postid = (await (params.params)).postId;  // Get the postid from params
   try {
     const { user: loggedInUser } = await validateRequest();
     if (!loggedInUser) {
-      return Response.json({ error: "Unauthorized" }, { status: 401 });
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
     const post = await prisma.post.findUnique({
-      where: { id: params.postid },  // Changed to params.postid
+      where: { id: postid },  // Changed to params.postid
       select: {
         likes: {
           where: {
@@ -32,7 +39,7 @@ export async function GET(
     });
 
     if (!post) {
-      return Response.json({ error: "Post not found" }, { status: 404 });
+      return NextResponse.json({ error: "Post not found" }, { status: 404 });
     }
 
     const data: LikeInfo = {
@@ -40,27 +47,27 @@ export async function GET(
       isLikedByUser: !!post.likes.length
     };
 
-    return Response.json(data);
+    return NextResponse.json(data);
   } catch (error) {
     console.error("GET Error:", error);
-    return Response.json({ error: "Internal server error" }, { status: 500 });
+    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
   }
 }
 
 export async function POST(
   req: Request,
-  { params }: { params: { postId: string } }  // Changed to lowercase
+  params: Props
 ) {
   try {
     const { user: loggedInUser } = await validateRequest();
     if (!loggedInUser) {
-      return Response.json({ error: "Unauthorized" }, { status: 401 });
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const postid = await(params.postId);  // Get the postid from params
+    const postid = (await(params.params)).postId;  // Get the postid from params
     
     if (!postid) {
-      return Response.json({ error: "Post ID is required" }, { status: 400 });
+      return NextResponse.json({ error: "Post ID is required" }, { status: 400 });
     }
 
     const post = await prisma.post.findUnique({
@@ -71,7 +78,7 @@ export async function POST(
     })
 
     if (!post){
-      return Response.json({ error: "Post not found" }, { status: 404 });
+      return NextResponse.json({ error: "Post not found" }, { status: 404 });
     }
 
   await prisma.$transaction(async (prisma) => {
@@ -104,22 +111,22 @@ export async function POST(
 
 
 
-    return new Response(null, { status: 200 });
+    return new NextResponse(null, { status: 200 });
   } catch (error) {
     console.error("POST Error:", error);
-    return Response.json({ error: "Internal server error" }, { status: 500 });
+    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
   }
 }
 
 export async function DELETE(
   req: Request,
-  { params }: { params: { postId: string } }  // Changed to lowercase
+  params: Props
 ) {
   try {
-    const postid = await(params.postId);  // Get the postid from params
+    const postid = (await(params.params)).postId;  // Get the postid from params
     const { user: loggedInUser } = await validateRequest();
     if (!loggedInUser) {
-      return Response.json({ error: "Unauthorized" }, { status: 401 });
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
     const post = await prisma.post.findUnique({
@@ -130,7 +137,7 @@ export async function DELETE(
     })
 
     if (!post){
-      return Response.json({ error: "Post not found" }, { status: 404 });
+      return NextResponse.json({ error: "Post not found" }, { status: 404 });
     }
 
     await prisma.$transaction([
@@ -158,9 +165,9 @@ export async function DELETE(
       }
     });
 
-    return new Response(null, { status: 200 });
+    return new NextResponse(null, { status: 200 });
   } catch (error) {
     console.error("DELETE Error:", error);
-    return Response.json({ error: "Internal server error" }, { status: 500 });
+    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
   }
 } 

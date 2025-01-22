@@ -3,6 +3,9 @@ import prisma from "@/lib/prisma";
 import { getPostDatainclude, PostsPage } from "@/lib/types";
 import { NextRequest } from "next/server";
 
+type Props = {
+  params: Promise<{ userId: string }>;
+};
 export async function GET(
   req: NextRequest,
   context: { params: Promise<{ userId: string }> }

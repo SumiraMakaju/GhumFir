@@ -1,7 +1,8 @@
 
 # dependencies
-*/node_modules
-/ghumfir_akash
+/node_modules/
+/ghumfir_akash/
+/ghumfir/
 /.pnp
 .pnp.*
 .yarn/*

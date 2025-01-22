@@ -10,8 +10,7 @@ import {
 } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { updateUserProfile } from "./action";
-import prisma from "@/lib/prisma";
-
+// import prisma from "@/lib/prisma";
 export function useUpdateProfileMutation() {
   const { toast } = useToast();
   const router = useRouter();
@@ -28,8 +27,11 @@ export function useUpdateProfileMutation() {
     }) => {
       // Start uploading the avatar if it's provided
       let uploadResult = undefined;
-      let updatedUser = undefined;
-        uploadResult = await startAvatarUpload([avatar])
+      let updatedUser:any;
+      if (!avatar) {
+        throw new Error("Avatar is required");
+      }
+      uploadResult = await startAvatarUpload([avatar])
         .then((res) => {
           if (!res) {
             throw new Error(res);
@@ -44,13 +46,13 @@ export function useUpdateProfileMutation() {
 
       return { updatedUser, uploadResult };
     },
-    onSuccess: async ({updatedUser, uploadResult}) => {
+    onSuccess: async ({updatedUser/*, uploadResult*/}) => {
       if (!updatedUser) {
         throw new Error("Failed to update profile");
       }
-
+      
       // Use the avatarUrl from the uploadthing response if available
-      const newAvatarUrl = updatedUser?.avatarUrl;    
+      const newAvatarUrl = updatedUser.avatarUrl;    
       const queryFilter: QueryFilters<InfiniteData<PostsPage, string | null>, Error, InfiniteData<PostsPage, string | null>, QueryKey> = {
         queryKey: ["post-feed"],
       };
