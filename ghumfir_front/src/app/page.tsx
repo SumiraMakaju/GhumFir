@@ -2,6 +2,7 @@ import Head from 'next/head';
 import Slider from '../components/Slider';
 import Link from 'next/link';
 import styles from '../components/landing.module.css';
+import { Button } from '@/components/ui/button';
 
 export default function Home() {
   return (
@@ -14,20 +15,31 @@ export default function Home() {
             <div style={{
         position: 'absolute',
         top: '20px',
-        right: '20px',
+        left: '650px',
         display: 'flex',
-        gap: '10px',
+        gap: '30px',
         zIndex: '10'
       }}>
         <Link href="/login">
-          <button className={styles.button}>
+          <Button 
+            style={{
+              fontSize: '20px', 
+              font: 'bold',
+              padding: '12px 24px', 
+              borderRadius: '8px', 
+            }}>
             Login
-          </button>
+          </Button>
         </Link>
         <Link href="/signup">
-          <button className={styles.button}>
+          <Button  style={{
+              fontSize: '20px', 
+              font: 'bold',
+              padding: '12px 24px', 
+              borderRadius: '8px', 
+            }} >
             Sign Up
-          </button>
+          </Button>
         </Link>
       </div>
 
