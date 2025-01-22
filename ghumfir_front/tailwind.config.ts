@@ -8,8 +8,38 @@ const config: Config = {
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
-  	extend: {
+	extend: {
+		animation: {
+			float: "float 6s ease-in-out infinite",
+			fade: "fadeIn 4s ease-in-out",
+			slideIn: "slideIn 1s ease-in-out",
+			slideUp: "slideUp 1s ease-in-out",
+			scale: "scaleIn 5s ease-in-out infinite",
+		  },
+		  keyframes: {
+			float: {
+			  "0%, 100%": { transform: "translateY(0)" },
+			  "50%": { transform: "translateY(-20px)" },
+			},
+			fadeIn: {
+			  "0%": { opacity: "0" },
+			  "100%": { opacity: "1" },
+			},
+			slideIn: {
+			  "0%": { transform: "translateX(100%)", opacity: "0" },
+			  "100%": { transform: "translateX(0)", opacity: "1" },
+			},
+			slideUp: {
+			  "0%": { transform: "translateY(100%)", opacity: "0" },
+			  "100%": { transform: "translateY(0)", opacity: "1" },
+			},
+			scaleIn: {
+			  "0%, 100%": { transform: "scale(1)" },
+			  "50%": { transform: "scale(1.1)" },
+			},
+		},
   		colors: {
+			
   			background: 'hsl(var(--background))',
   			foreground: 'hsl(var(--foreground))',
 			card: {
