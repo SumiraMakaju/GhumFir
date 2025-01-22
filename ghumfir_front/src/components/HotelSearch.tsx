@@ -267,7 +267,7 @@ const HotelCard: React.FC<HotelCardProps> = ({
   return (
     <div className="bg-primary-foreground shadow-lg rounded-lg overflow-hidden hover:scale-105 transition-transform">
       <img
-        src={imageUrl || '/placeholder-hotel.jpg'}
+        src={imageUrl || './assets/hotel-placeholder.jpg'}
         alt={hotelName}
         className="w-full h-48 object-cover"
       />
