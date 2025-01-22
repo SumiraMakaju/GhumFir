@@ -1,3 +1,4 @@
+
 // // 'use client';
 
 // // import { useState, useEffect, useCallback } from 'react';
@@ -294,6 +295,7 @@
 // };
 
 // export default Slider;
+
 "use client";
 
 import { useState, useEffect } from "react";
@@ -465,6 +467,28 @@ export default function Slider() {
         )}
       </AnimatePresence>
 
+
+      {/* Background Transition */}
+      <AnimatePresence initial={false}>
+        <motion.div
+          key={`bg-${currentIndex}`}
+          className="absolute inset-0"
+          initial={{ opacity: 0, scale: 1.05, filter: "blur(15px)" }}
+          animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
+          exit={{ opacity: 0, scale: 1.05, filter: "blur(15px)" }}
+          transition={{ duration: 1.2, ease: "easeOut" }}
+        >
+          <img
+            src={destinations[currentIndex].imageUrl}
+            alt={destinations[currentIndex].title}
+            className="w-full h-full object-cover"
+          />
+          <div className="absolute inset-0 bg-black/50" />
+        </motion.div>
+      </AnimatePresence>
+
+
+
       {/* Background Transition */}
       <AnimatePresence initial={false}>
         <motion.div
@@ -536,5 +560,6 @@ export default function Slider() {
       </div>
     </div>
   );
+
 }
-Sumira
+}
