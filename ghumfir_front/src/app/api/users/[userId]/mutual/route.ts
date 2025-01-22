@@ -2,13 +2,19 @@ import { validateRequest } from "@/auth";
 import prisma from "@/lib/prisma";
 import { NextResponse } from "next/server";
 
+type Props = {
+  params: Promise<{
+    userId: string;
+  }>;
+};
+
 export async function GET(
   req: Request,
-  context: { params: { userId: string } }
+  context: Props
 ) {
   try {
-    const { params } = context;
-    const { userId } = await(params);
+    const func_params = await (context.params);
+    const userId  = func_params.userId as string;
 
     const { user: loggedInUser } = await validateRequest();
 

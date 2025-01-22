@@ -7,7 +7,6 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Calendar, MapPin, Plane, Hotel, Compass, Share2, Loader2 } from "lucide-react";
 import { TravelPackage, adaptTravelPackage } from "@/lib/travelPackages";
-import { set } from "date-fns";
 
 export default function TripAdvisor() {
   const [budget, setBudget] = useState<number[]>([10000]);
@@ -21,7 +20,7 @@ export default function TripAdvisor() {
 
   useEffect(() => {
     fetchTravelPackages();
-  }, []);
+  });
 
   useEffect(() => {
     filterRecommendations();
@@ -57,8 +56,8 @@ export default function TripAdvisor() {
         }
 
         const adaptedPackages = data.data
-            .filter(item => item !== null && typeof item === 'object')
-            .map(item => {
+            .filter((item: Record<string, any>) => item !== null && typeof item === 'object')
+            .map((item: Record<string, any>) => {
                 try {
                     return adaptTravelPackage(item);
                 } catch (error) {
@@ -85,40 +84,76 @@ export default function TripAdvisor() {
     }
 };
 
+// const filterRecommendations = () => {
+//     if (!Array.isArray(recommendations)) {
+//         setFilteredRecommendations([]);
+//         return;
+//     }
+
+//     const filtered = recommendations.filter(rec => {
+//         if (!rec) return false;
+
+//         try {
+//             const matchesSearch = searchQuery
+//                 ? rec.destination.toLowerCase().includes(searchQuery.toLowerCase()) ||
+//                   rec.activities.some(activity => 
+//                       activity.toLowerCase().includes(searchQuery.toLowerCase())
+//                   )
+//                 : true;
+
+//             const matchesBudget = rec.price <= budget[0];
+            
+//             const matchesTransport = !transportPreference || 
+//                 rec.transport.toLowerCase().includes(transportPreference.toLowerCase());
+            
+//             const matchesAccommodation = !accommodationPreference || 
+//                 rec.accommodation.toLowerCase().includes(accommodationPreference.toLowerCase());
+
+//             return matchesSearch && matchesBudget && matchesTransport && matchesAccommodation;
+//         } catch (error) {
+//             console.error('Error filtering recommendation:', error);
+//             return false;
+//         }
+//     });
+
+//     setFilteredRecommendations(filtered);
+// };
+
 const filterRecommendations = () => {
-    if (!Array.isArray(recommendations)) {
-        setFilteredRecommendations([]);
-        return;
-    }
+  if (!Array.isArray(recommendations)) {
+      setFilteredRecommendations([]);
+      return;
+  }
 
-    const filtered = recommendations.filter(rec => {
-        if (!rec) return false;
+  const filtered = recommendations.filter(rec => {
+      if (!rec) return false;
 
-        try {
-            const matchesSearch = searchQuery
-                ? rec.destination.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                  rec.activities.some(activity => 
-                      activity.toLowerCase().includes(searchQuery.toLowerCase())
-                  )
-                : true;
+      try {
+          const matchesSearch = searchQuery
+              ? (rec.destination && rec.destination.toLowerCase().includes(searchQuery.toLowerCase())) ||
+                (rec.activities && rec.activities.some(activity => 
+                    activity.toLowerCase().includes(searchQuery.toLowerCase())
+                ))
+              : true;
 
-            const matchesBudget = rec.price <= budget[0];
-            
-            const matchesTransport = !transportPreference || 
-                rec.transport.toLowerCase().includes(transportPreference.toLowerCase());
-            
-            const matchesAccommodation = !accommodationPreference || 
-                rec.accommodation.toLowerCase().includes(accommodationPreference.toLowerCase());
+          const matchesBudget = Array.isArray(budget) && budget.length > 0 ? rec.price <= budget[0] : true;
+          
+          const matchesTransport = !transportPreference || 
+              (rec.transport && rec.transport.toLowerCase().includes(transportPreference.toLowerCase()));
+          
+          const matchesAccommodation = !accommodationPreference || 
+              (rec.accommodation && rec.accommodation.toLowerCase().includes(accommodationPreference.toLowerCase()));
 
-            return matchesSearch && matchesBudget && matchesTransport && matchesAccommodation;
-        } catch (error) {
-            console.error('Error filtering recommendation:', error);
-            return false;
-        }
-    });
+          return matchesSearch && matchesBudget && matchesTransport && matchesAccommodation;
+      } catch (error) {
+          console.error('Error filtering recommendation:', error);
+          return false;
+      }
+  });
 
-    setFilteredRecommendations(filtered);
+  setFilteredRecommendations(filtered);
 };
+
 
   return (
     <div className="container mx-auto p-4 lg:p-6 space-y-6">

@@ -7,12 +7,13 @@ import prisma from "@/lib/prisma";
 import { FollowerInfo, getUserDataSelect, UserData } from "@/lib/types";
 import { formatNumber } from "@/lib/utils";
 import { notFound } from "next/navigation";
-import { cache } from "react";
+import { cache, use } from "react";
 import UserPosts from "./UserPosts";
 import EditProfile from "./EditProfile";
+import  { Metadata } from "next";
 
 interface PageProps {
-  params: { username: string };
+  params: Promise<{ username: string }>;
 }
 
 // Cache the user retrieval function for optimization
@@ -32,9 +33,9 @@ const getUser = cache(async (username: string, loggedInUser: string) => {
 });
 
 // Generate dynamic metadata
-export async function generateMetadata({ params }: PageProps) {
-  const { username } = await(params);
-
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+  // const { username } = await(params);
+  const { username } = use(params);
   const { user: loggedInUser } = await validateRequest();
 
   if (!loggedInUser) return {};
@@ -48,7 +49,8 @@ export async function generateMetadata({ params }: PageProps) {
 
 // Main Page component
 export default async function Page({ params }: PageProps) {
-  const { username } = await(params);
+  // const { username } = await(params);
+  const { username } = use(params);
 
   const { user: loggedInUser } = await validateRequest();
 

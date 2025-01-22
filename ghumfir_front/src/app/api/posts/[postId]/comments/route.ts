@@ -1,88 +1,38 @@
 import { validateRequest } from "@/auth";
 import prisma from "@/lib/prisma";
 import { CommentsPage, getCommentDataInclude } from "@/lib/types";
-import { NextRequest } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
-// export async function GET(
-//   req: NextRequest,
-//   { params: { postId } }: { params: { postId: string } },
-// ) {
-//   try {
-//     const cursor = req.nextUrl.searchParams.get("cursor") || undefined;
-
-//     const pageSize = 5;
-
-//     const { user } = await validateRequest();
-
-//     if (!user) {
-//       return Response.json({ error: "Unauthorized" }, { status: 401 });
-//     }
-
-//     // First, get total count of comments
-//     const totalComments = await prisma.comment.count({
-//       where: { postId: postId }
-//     });
-
-//     // Only fetch with pagination if there are more than pageSize comments
-//     if (totalComments <= pageSize) {
-//       // If we have fewer comments than pageSize, just fetch all of them
-//       const comments = await prisma.comment.findMany({
-//         where: { postId: postId },
-//         include: getCommentDataInclude(user.id),
-//         orderBy: { createdAt: "asc" },
-//       });
-
-//       return Response.json({
-//         comments,
-//         previousCursor: null // No need for cursor when we have all comments
-//       });
-//     }
-
-//     const comments = await prisma.comment.findMany({
-//       where: { postId: postId },
-//       include: getCommentDataInclude(user.id),
-//       orderBy: { createdAt: "asc" },
-//       take: -pageSize - 1,
-//       cursor: cursor ? { id: cursor } : undefined,
-//     });
-
-//     const previousCursor = comments.length > pageSize ? comments[0].id : null;
-
-//     const data: CommentsPage = {
-//       comments: comments.length > pageSize ? comments.slice(1) : comments,
-//       previousCursor,
-//     };
-
-//     return Response.json(data);
-//   } catch (error) {
-//     console.error(error);
-//     return Response.json({ error: "Internal server error" }, { status: 500 });
-//   }
-// }
+type Props = {
+   params:  Promise<{ 
+    postId: string 
+  }> };
 
 export async function GET(
   req: NextRequest,
-  { params }: { params: { postId: string } }
+  context: Props
 ) {
   try {
-    const cursor = req.nextUrl.searchParams.get("cursor") || undefined;
+    const url = new URL(req.url);
+    const cursor = url.searchParams.get("cursor") || undefined;
     const pageSize = 5;
-    const postId = await(params.postId); // Correctly access the postId from params
+    const postId = (await context.params).postId as string; // Correctly access the postId from params
     if (!postId) {
-      return Response.json({ error: "Post ID is required" }, { status: 400 });
+      return NextResponse.json({ error: "Post ID is required" }, { status: 400 });
     }
 
     const { user } = await validateRequest();
     if (!user) {
-      return Response.json({ error: "Unauthorized" }, { status: 401 });
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
+
      // Validate that the post exists first
      const post = await prisma.post.findUnique({
       where: { id: postId },
     });
 
     if (!post) {
-      return Response.json({ error: "Post not found" }, { status: 404 });
+      return NextResponse.json({ error: "Post not found" }, { status: 404 });
     }
 
     // Count comments for this specific post only
@@ -93,7 +43,7 @@ export async function GET(
     });
 
     if (totalComments === 0) {
-      return Response.json({
+      return NextResponse.json({
         comments: [],
         previousCursor: null
       });
@@ -106,7 +56,7 @@ export async function GET(
         orderBy: { createdAt: "desc" },
       });
 
-      return Response.json({
+      return NextResponse.json({
         comments,
         previousCursor: null
       });
@@ -129,9 +79,9 @@ export async function GET(
       previousCursor,
     };
 
-    return Response.json(data);
+    return NextResponse.json(data);
   } catch (error) {
     console.error(error);
-    return Response.json({ error: "Internal server error" }, { status: 500 });
+    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
   }
 }

@@ -1,6 +1,6 @@
-import { ChannelList, ChannelPreview} from "stream-chat-react";
+import { ChannelList} from "stream-chat-react";
 import { useSession } from "../SessionProvider";
-import { channel } from "diagnostics_channel";
+// import { channel } from "diagnostics_channel";
 
 export default function Side(){
     const {user} = useSession();

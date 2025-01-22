@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { useSession } from "../SessionProvider";
 import { StreamChat } from "stream-chat";
-import {useCreateChatClient} from "stream-chat-react"
 import kyInstance from "@/lib/ky";
 //import { error } from "console";
 

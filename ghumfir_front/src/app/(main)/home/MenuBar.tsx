@@ -1,16 +1,16 @@
-import { Button } from "@/components/ui/button";
-import Link from "next/link";
-import {
-  BookAIcon,
-  CalendarClock,
-  Globe2Icon,
-  Home,
-  Hotel,
-} from "lucide-react";
+// import { Button } from "@/components/ui/button";
+// import Link from "next/link";
+// import {
+//   BookAIcon,
+//   CalendarClock,
+//   Globe2Icon,
+//   Home,
+//   Hotel,
+// } from "lucide-react";
 import prisma from "@/lib/prisma";
 import { validateRequest } from "@/auth";
-import NotificationsButton from "../notbut";
-import ChatButton from "../chatbutton";
+// import NotificationsButton from "../notbut";
+// import ChatButton from "../chatbutton";
 import MenuBarClient from "./MenuBarClient";
 import streamServerClient from "@/lib/stream";
 

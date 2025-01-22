@@ -155,6 +155,7 @@ export default function Page() {
   useEffect(() => {
     // fetchCategories();
     fetchEvents(true);
+    setCategories([]);
   }, []);
 
   useEffect(() => {
@@ -183,7 +184,8 @@ export default function Page() {
       <EventSearch 
         onSearch={handleSearch} 
         categories={categories}
-      />
+        
+        />
 
       {error && (
         <p className="text-center text-red-500 mb-4">{error}</p>
