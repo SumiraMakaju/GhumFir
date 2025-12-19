@@ -1,3 +1,8 @@
+GhumFir is a social media app specifically designed for travellers including post sharing, chat, in built AI travel planner and a digital diary for the user. Although meant for travellers and people who love travelling, it is equally useful for day to day life sharing and keeeping all the memories in safe documented place.
+
+
+
+
 # Ghumphir Frontend
 
 This is the README file for the frontend of the **Ghumphir** project. This document provides instructions on how to install Node.js, configure Next.js, and set up the frontend environment for this project.
