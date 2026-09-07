@@ -6,7 +6,8 @@ const nextConfig: NextConfig = {
         dynamic:5,
       },
     },
-    serverExternalPackages: ["@node-rs/argon2", "uploadthing", "@uploadthing/react"], 
+    serverExternalPackages: ["@node-rs/argon2"], 
+    transpilePackages: ["uploadthing", "@uploadthing/react"],
     images:{
       domains: ['utfs.io'], // Add the domain here
       remotePatterns:[
