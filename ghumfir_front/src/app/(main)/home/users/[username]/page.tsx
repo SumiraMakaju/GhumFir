@@ -34,8 +34,7 @@ const getUser = cache(async (username: string, loggedInUser: string) => {
 
 // Generate dynamic metadata
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
-  // const { username } = await(params);
-  const { username } = use(params);
+  const { username } = await params;
   const { user: loggedInUser } = await validateRequest();
 
   if (!loggedInUser) return {};
@@ -49,8 +48,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
 // Main Page component
 export default async function Page({ params }: PageProps) {
-  // const { username } = await(params);
-  const { username } = use(params);
+  const { username } = await params;
 
   const { user: loggedInUser } = await validateRequest();
 
@@ -88,7 +86,7 @@ async function UserProfile({ user, loggedInUserId }: UserProfileProps) {
   const followerInfo: FollowerInfo = {
     followers: user._count.followers || 0,
     isFollowedByUser: user.followers.some(
-      ({ followerId }) => followerId === loggedInUserId
+      ({ followerId }: any) => followerId === loggedInUserId
     ),
   };
 

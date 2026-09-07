@@ -17,7 +17,7 @@ export async function updateUserProfile(values: UpdateUserProfileValues, avatarU
 
   if (!user) throw new Error("Unauthorized");
 
-  const updatedUser = await prisma.$transaction(async (tx) => {
+  const updatedUser = await prisma.$transaction(async (tx: any) => {
     const updatedUser = await tx.user.update({
       where: { id: user.id },
       data: {

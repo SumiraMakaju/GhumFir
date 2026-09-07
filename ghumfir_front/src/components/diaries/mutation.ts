@@ -16,7 +16,7 @@ export function useDeleteDiaryMutation(){
     const mutation = useMutation({
         mutationFn: deleteDiary,
         onSuccess: async(deletedDiary) => {
-            const queryFilter: QueryFilters<InfiniteData<DiariesPage, string | null>> = { queryKey: [" "] }
+            const queryFilter: QueryFilters = { queryKey: [" "] }
 
             await queryClient.cancelQueries(queryFilter);
 

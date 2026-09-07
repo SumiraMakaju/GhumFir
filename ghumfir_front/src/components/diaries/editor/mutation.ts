@@ -80,7 +80,7 @@ export function useSubmitDiaryMutation() {
     const mutation = useMutation({
         mutationFn: submitDiary,
         onSuccess: async (newDiary: DiariesData) => {
-            const queryFilter: QueryFilters<InfiniteData<DiariesPage, string | null>> = {
+            const queryFilter: QueryFilters = {
                 queryKey: ["diaries"]
             };
 

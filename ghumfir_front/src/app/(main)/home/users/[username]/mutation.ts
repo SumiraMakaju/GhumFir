@@ -53,7 +53,7 @@ export function useUpdateProfileMutation() {
       
       // Use the avatarUrl from the uploadthing response if available
       const newAvatarUrl = updatedUser.avatarUrl;    
-      const queryFilter: QueryFilters<InfiniteData<PostsPage, string | null>, Error, InfiniteData<PostsPage, string | null>, QueryKey> = {
+      const queryFilter: QueryFilters = {
         queryKey: ["post-feed"],
       };
 

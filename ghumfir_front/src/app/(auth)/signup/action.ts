@@ -50,7 +50,7 @@ export async function signUp(
       };
     }
   
-    await prisma.$transaction(async (tx) => {
+    await prisma.$transaction(async (tx: any) => {
       try {
         await tx.user.create({
           data: {
